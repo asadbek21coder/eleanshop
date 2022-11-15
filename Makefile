@@ -10,7 +10,7 @@ run:
 	go run cmd/main.go
 
 migrate-up:
-	migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5435/eleanshop?sslmode=disable' up
+	migrate -path ./schema -database 'postgres://postgres:asadbek@localhost:5432/eleanshop?sslmode=disable' up
 
 migrate-down:
-	migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5435/eleanshop?sslmode=disable' down
+	migrate -path ./schema -database 'postgres://postgres:asadbek@localhost:5432/eleanshop?sslmode=disable' down

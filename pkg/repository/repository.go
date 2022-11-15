@@ -10,6 +10,14 @@ type Authorization interface {
 	GetUser(username, password string) (models.User, error)
 }
 
+type Category interface {
+	CreateCategory(string) (int, error)
+	GetCategoryById(int) (models.Category, error)
+	GetAllCategories() ([]models.Category, error)
+	UpdateCategory(int, string) (int, error)
+	DeleteCategory(int) (int, error)
+}
+
 type Product interface {
 	CreateProduct(product models.ProductRequest) (int, error)
 	GetProductById(id int) (models.Product, error)

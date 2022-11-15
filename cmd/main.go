@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -13,8 +14,25 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	// 	_ "github.com/swaggo/swag/cmd/swag@latest"
+	// 	"github.com/swaggo/gin-swagger"
+	// "github.com/swaggo/files"
 )
 
+// @title           Eleanshop
+// @version         1.0
+// @description     This is a sample server celler server.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/v1
 func main() {
 
 	logrus.SetFormatter(new(logrus.JSONFormatter))
@@ -37,6 +55,7 @@ func main() {
 	})
 
 	if err != nil {
+		fmt.Println("this")
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 	repos := repository.NewRepository(db)

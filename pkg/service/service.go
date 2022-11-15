@@ -42,6 +42,14 @@ type Question interface {
 	DeleteQuestion(id int) (int, error)
 }
 
+type Category interface {
+	CreateCategory(string) (int, error)
+	GetCategoryById(int) (models.Category, error)
+	GetAllCategories() ([]models.Category, error)
+	UpdateCategory(int, string) (int, error)
+	DeleteCategory(int) (int, error)
+}
+
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
