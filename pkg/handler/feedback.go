@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,6 +13,7 @@ func (h *Handler) createFeedback(c *gin.Context) {
 	var input models.Feedback
 
 	if err := c.BindJSON(&input); err != nil {
+		fmt.Println("this")
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}

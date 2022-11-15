@@ -2,15 +2,17 @@ package models
 
 type Feedback struct {
 	ID          int    `json:"id"`
-	Name        string `json:"name"`
+	UserId      int    `json:"user_id"`
 	PhoneNumber string `json:"phone_number"`
 	Email       string `json:"email"`
 	Text        string `json:"text"`
+	ProductId   int    `json:"product_id"`
 }
 
 type UpdateFeedbackInput struct {
-	Name        *string `json:"name"`
+	UserId      *int    `json:"user_id"`
 	PhoneNumber *string `json:"phone_number"`
 	Email       *string `json:"email"`
 	Text        *string `json:"text"`
+	ProductId   *int    `json:"product_id"`
 }

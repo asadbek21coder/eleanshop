@@ -36,7 +36,7 @@ CREATE TABLE "product_sizes" (
 
 CREATE TABLE "feedbacks" (
     "id" serial not null primary key,
-    "name" varchar(128) not null,
+    "user_id" int not null references users(id),
     "phone_number" varchar(128) not null,
     "email" varchar(128) not null,
     "text" varchar(256) not null,

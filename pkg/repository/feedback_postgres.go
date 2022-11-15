@@ -18,9 +18,9 @@ func NewFeedbackPostgres(db *sqlx.DB) *FeedbackPostgres {
 
 func (r *FeedbackPostgres) CreateFeedback(feedback models.Feedback) (int, error) {
 	var id int
-	query := "INSERT INTO feedbacks (name, phone_number, email, text) VALUES ($1, $2, $3, $4) RETURNING id;"
+	query := "INSERT INTO feedbacks (user_id, phone_number, email, text, product_id) VALUES ($1, $2, $3, $4, $5) RETURNING id;"
 
-	row := r.db.QueryRow(query, feedback.Name, feedback.PhoneNumber, feedback.Email, feedback.Text)
+	row := r.db.QueryRow(query, feedback.UserId, feedback.PhoneNumber, feedback.Email, feedback.Text, feedback.ProductId)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
@@ -32,17 +32,17 @@ func (r *FeedbackPostgres) GetFeedbackById(id int) (models.Feedback, error) {
 	var fb models.Feedback
 	query := "SELECT * FROM feedbacks WHERE id = $1"
 	row := r.db.QueryRow(query, id)
-	err := row.Scan(&fb.ID, &fb.Name, &fb.PhoneNumber, &fb.Email, &fb.Text)
+	err := row.Scan(&fb.ID, &fb.UserId, &fb.PhoneNumber, &fb.Email, &fb.Text, &fb.ProductId)
 	return fb, err
 }
 
 func (r *FeedbackPostgres) GetAllFeedbacks() ([]models.Feedback, error) {
 	var feedbacks []models.Feedback
-	query := "SELECT id, name, phone_number, email, text FROM feedbacks;"
+	query := "SELECT id, user_id, phone_number, email, text, product_id FROM feedbacks;"
 	row, err := r.db.Query(query)
 	for row.Next() {
 		var fb models.Feedback
-		_ = row.Scan(&fb.ID, &fb.Name, &fb.PhoneNumber, &fb.Email, &fb.Text)
+		_ = row.Scan(&fb.ID, &fb.UserId, &fb.PhoneNumber, &fb.Email, &fb.Text, &fb.ProductId)
 		feedbacks = append(feedbacks, fb)
 	}
 	return feedbacks, err
@@ -52,11 +52,12 @@ func (r *FeedbackPostgres) UpdateFeedback(id int, input models.UpdateFeedbackInp
 	var fb models.Feedback
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
-	argID := 1
+	argID := 2
+	args = append(args, id)
 
-	if input.Name != nil {
+	if input.UserId != nil {
 		setValues = append(setValues, fmt.Sprintf("name=$%d", argID))
-		args = append(args, *input.Name)
+		args = append(args, *&input.UserId)
 		argID++
 	}
 
@@ -78,11 +79,17 @@ func (r *FeedbackPostgres) UpdateFeedback(id int, input models.UpdateFeedbackInp
 		argID++
 	}
 
+	if input.ProductId != nil {
+		setValues = append(setValues, fmt.Sprintf("product_id=$%d", argID))
+		args = append(args, *input.ProductId)
+		argID++
+	}
+
 	setQuery := strings.Join(setValues, ", ")
 
-	query := fmt.Sprintf("UPDATE feedbacks SET %s RETURNING id, name, phone_number, email, text;", setQuery)
+	query := fmt.Sprintf("UPDATE feedbacks SET %s where id=$1 RETURNING id, user_id, phone_number, email, text, product_id;", setQuery)
 	row := r.db.QueryRow(query, args...)
-	err := row.Scan(&fb.ID, &fb.Name, &fb.PhoneNumber, &fb.Email, &fb.Text)
+	err := row.Scan(&fb.ID, &fb.UserId, &fb.PhoneNumber, &fb.Email, &fb.Text, &fb.ProductId)
 	return fb, err
 }
 
