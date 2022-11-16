@@ -1,5 +1,7 @@
 package models
 
+import "errors"
+
 type ProductRequest struct {
 	ProductName string `json:"product_name"`
 	CategoryId  int    `json:"category_id"`
@@ -7,6 +9,14 @@ type ProductRequest struct {
 	Color       string `json:"color"`
 	Count       int    `json:"count"`
 	Sizes       []int  `json:"sizes"`
+}
+
+func (i ProductRequest) Validate() error {
+	if i.ProductName == "" && i.CategoryId == 0 && i.Price == 0 && i.Color == "" && i.Count == 0 {
+		return errors.New("update structure has no values")
+	}
+
+	return nil
 }
 
 type Product struct {

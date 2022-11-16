@@ -28,6 +28,9 @@ func (r *ProductService) GetAllProducts() ([]models.Product, error) {
 }
 
 func (r *ProductService) UpdateProduct(id int, input models.ProductRequest) (int, error) {
+	if err := input.Validate(); err != nil {
+		return 0, err
+	}
 	return r.repo.UpdateProduct(id, input)
 }
 
