@@ -42,6 +42,7 @@ type Product struct {
 	Count        int    `json:"count"`
 	CategoryName string `json:"category_name"`
 	Sizes        []int  `json:"available_sizes"`
+	ImageUrl     string `json:"image_url"`
 }
 
 type Category struct {

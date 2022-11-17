@@ -103,7 +103,33 @@ func (h *Handler) getAllProducts(c *gin.Context) {
 }
 
 func (h *Handler) updateProduct(c *gin.Context) {
-	var id int
+	var userObj models.FakeProduct
+	var request models.ProductRequest
+
+	if err := c.ShouldBind(&userObj); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
+		return
+	}
+
+	err := c.SaveUploadedFile(userObj.Image, "assets/images/"+userObj.Image.Filename)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		return
+	}
+
+	sizes, err := convertToIntSlice(userObj.Sizes)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		return
+	}
+
+	request.ProductName = userObj.ProductName
+	request.CategoryId = userObj.CategoryId
+	request.Price = userObj.Price
+	request.Color = userObj.Color
+	request.Count = userObj.Count
+	request.Sizes = sizes
+	request.ImageUrl = "assets/images/" + userObj.Image.Filename
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -111,14 +137,7 @@ func (h *Handler) updateProduct(c *gin.Context) {
 		return
 	}
 
-	var input models.ProductRequest
-
-	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
-		return
-	}
-
-	data, err := h.services.Product.UpdateProduct(id, input)
+	data, err := h.services.Product.UpdateProduct(id, request)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

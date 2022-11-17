@@ -112,7 +112,7 @@ func (r *ProductPostgres) GetProductById(id int) (models.Product, error) {
 func (r *ProductPostgres) GetAllProducts() ([]models.Product, error) {
 	var resp []models.Product
 
-	queryGetAllProducts := `SELECT id, product_name,category_id, (select name from categories as cat where cat.id=p.category_id), price, color, count 
+	queryGetAllProducts := `SELECT id, product_name,category_id, (select name from categories as cat where cat.id=p.category_id), price, color, count, image_url 
 	FROM products as p`
 
 	queryGetProductSizes := `SELECT size_id FROM product_sizes WHERE product_id=$1`
@@ -137,6 +137,7 @@ func (r *ProductPostgres) GetAllProducts() ([]models.Product, error) {
 			&product.Price,
 			&product.Color,
 			&product.Count,
+			&product.ImageUrl,
 		)
 		if err != nil {
 			return []models.Product{}, err
@@ -175,7 +176,7 @@ func (r *ProductPostgres) UpdateProduct(id int, input models.ProductRequest) (in
 	if err != nil {
 		return 0, errors.New("transacion couldn`t begin")
 	}
-	queryUpdateProduct := `UPDATE products SET product_name=$1, category_id=$2, price=$3, color=$4, count=$5 WHERE id=$6 RETURNING id`
+	queryUpdateProduct := `UPDATE products SET product_name=$1, category_id=$2, price=$3, color=$4, count=$5, image_url=$6 WHERE id=$7 RETURNING id`
 	queryDeleteProductSizes := `DELETE FROM product_sizes WHERE product_id=$1`
 	queryInsertProductSizes := `INSERT INTO product_sizes (product_id, size_id) VALUES ($1,$2)`
 
@@ -193,7 +194,7 @@ func (r *ProductPostgres) UpdateProduct(id int, input models.ProductRequest) (in
 		}
 	}
 
-	row, err := tx.Query(queryUpdateProduct, input.ProductName, input.CategoryId, input.Price, input.Color, input.Count, id)
+	row, err := tx.Query(queryUpdateProduct, input.ProductName, input.CategoryId, input.Price, input.Color, input.Count, input.ImageUrl, id)
 	if err != nil {
 		tx.Rollback()
 		return 0, err
