@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/asadbek21coder/eleanshop/pkg/service"
+	// "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +16,9 @@ func NewHandler(services *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-
+	// config := cors.DefaultConfig()
+	// config.AllowOrigins = []string{"*"}
+	// router.Use(cors.New(config))
 	auth := router.Group("/auth")
 	{
 		auth.POST("/signup", h.signup)
@@ -69,6 +72,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		question.PUT("/:id", h.updateQuestion)
 		question.DELETE("/:id", h.deleteQuestion)
 	}
-
+	router.Static("assets", "./assets")
 	return router
 }
