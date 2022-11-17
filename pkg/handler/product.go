@@ -2,20 +2,14 @@ package handler
 
 import (
 	"encoding/json"
-	"mime/multipart"
+	"fmt"
 	"net/http"
 	"strconv"
 
-	// "github.com/asadbek21coder/eleanshop/models"
 	"github.com/asadbek21coder/eleanshop/models"
 	"github.com/gin-gonic/gin"
 )
 
-type user struct {
-	Name   string                `form:"name"`
-	Email  string                `form:"email"`
-	Avatar *multipart.FileHeader `form:"avatar" binding:"required"`
-}
 type IntSlice struct {
 	Ints []int
 }
@@ -54,30 +48,20 @@ func (h *Handler) createProduct(c *gin.Context) {
 	request.Color = userObj.Color
 	request.Count = userObj.Count
 	request.Sizes = sizes
+	request.ImageUrl = "assets/images/" + userObj.Image.Filename
 
-	c.JSON(http.StatusOK, gin.H{
-		"status": "ok",
-		"data":   userObj,
+	fmt.Println(request)
+	data, err := h.services.Product.CreateProduct(request)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusCreated, map[string]interface{}{
+		"data":    data,
+		"isOk":    true,
+		"message": "OK",
 	})
-
-	// // data, err := h.services.Product.CreateProduct(input)
-	// // if err != nil {
-	// // 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	// // 	return
-	// // }
-	// fmt.Print(response)
-
-	// err := c.SaveUploadedFile(response.Image, response.Image.Filename)
-	// if err != nil {
-	// 	c.String(http.StatusInternalServerError, "unknown error")
-	// 	return
-	// }
-
-	// c.JSON(http.StatusCreated, map[string]interface{}{
-	// 	"data":    response,
-	// 	"isOk":    true,
-	// 	"message": "OK",
-	// })
 
 }
 

@@ -51,6 +51,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			sizes.POST("/", h.createSize)
 			sizes.GET("/", h.getAllSizes)
+			sizes.GET("/:id", h.getSizesById)
 			sizes.DELETE("/:id", h.deleteSize)
 		}
 	}

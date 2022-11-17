@@ -23,9 +23,9 @@ func (r *ProductPostgres) CreateProduct(product models.ProductRequest) (int, err
 		return 0, err
 	}
 
-	queryCreateProduct := `INSERT INTO products (product_name, category_id, price, color, count) VALUES ($1,$2,$3,$4,$5) RETURNING id`
+	queryCreateProduct := `INSERT INTO products (product_name, category_id, price, color, count,image_url) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`
 
-	row := tx.QueryRow(queryCreateProduct, product.ProductName, product.CategoryId, product.Price, product.Color, product.Count)
+	row := tx.QueryRow(queryCreateProduct, product.ProductName, product.CategoryId, product.Price, product.Color, product.Count, product.ImageUrl)
 
 	if err := row.Scan(&id); err != nil {
 		tx.Rollback()

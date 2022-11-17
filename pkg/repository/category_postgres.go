@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/asadbek21coder/eleanshop/models"
 	"github.com/jmoiron/sqlx"
 )
@@ -30,11 +32,17 @@ func (r *CategoryPostgres) CreateCategory(name string) (int, error) {
 func (r *CategoryPostgres) GetCategoryById(id int) (models.Category, error) {
 	var resp models.Category
 	queryCreateSize := `SELECT * FROM categories WHERE id=$1`
-	err := r.db.Select(&resp, queryCreateSize, id)
+	row := r.db.QueryRow(queryCreateSize, id)
 
+	err := row.Scan(
+		&resp.ID,
+		&resp.CategoryName,
+	)
 	if err != nil {
 		return models.Category{}, err
 	}
+
+	fmt.Println(resp)
 
 	return resp, nil
 
@@ -45,7 +53,23 @@ func (r *CategoryPostgres) GetAllCategories() ([]models.Category, error) {
 
 	queryGetAllCategories := `SELECT * FROM categories`
 
-	r.db.Get(&resp, queryGetAllCategories)
+	row, err := r.db.Query(queryGetAllCategories)
+	if err != nil {
+		return []models.Category{}, err
+	}
+
+	for row.Next() {
+		var category models.Category
+		err := row.Scan(
+			&category.ID,
+			&category.CategoryName,
+		)
+		if err != nil {
+			return []models.Category{}, err
+		}
+		resp = append(resp, category)
+
+	}
 
 	return resp, nil
 }

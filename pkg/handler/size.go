@@ -63,3 +63,22 @@ func (h *Handler) deleteSize(c *gin.Context) {
 		"message": "Deleted",
 	})
 }
+
+func (h *Handler) getSizesById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	data, err := h.services.Size.GetSizesById(id)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"isOk":    data,
+		"message": "Ok",
+	})
+}

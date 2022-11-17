@@ -16,6 +16,7 @@ func NewSizeService(repo repository.Size) *SizeService {
 type Size interface {
 	CreateSize(models.SizeInput) (models.Size, error)
 	GetAllSize() ([]models.Size, error)
+	GetSizesById(int) (models.Size, error)
 	DeleteSize(int) error
 }
 
@@ -30,4 +31,8 @@ func (r *SizeService) GetAllSize() ([]models.Size, error) {
 
 func (r *SizeService) DeleteSize(id int) error {
 	return r.repo.DeleteSize(id)
+}
+
+func (r *SizeService) GetSizesById(id int) (models.Size, error) {
+	return r.repo.GetSizesById(id)
 }

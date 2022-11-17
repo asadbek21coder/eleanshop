@@ -6,16 +6,14 @@ import (
 )
 
 type ProductRequest struct {
-	ProductName string                `form:"product_name"`
-	CategoryId  int                   `form:"category_id"`
-	Price       int                   `form:"price"`
-	Color       string                `form:"color"`
-	Count       int                   `form:"count"`
-	Sizes       []int                 `form:"sizes"`
-	Image       *multipart.FileHeader `form:"image" binding:"required"`
+	ProductName string `json:"product_name"`
+	CategoryId  int    `json:"category_id"`
+	Price       int    `json:"price"`
+	Color       string `json:"color"`
+	Count       int    `json:"count"`
+	Sizes       []int  `json:"sizes"`
+	ImageUrl    string `json:"image_url"`
 }
-
-
 
 type FakeProduct struct {
 	ProductName string                `form:"product_name"`

@@ -22,8 +22,9 @@ CREATE TABLE "products" (
     "product_name" varchar(256) not null,
     "category_id" int not null references categories(id),
     "price" bigint not null,
-    "color" varchar(64),
+    "color" varchar(64) not null,
     "count" int not null,
+    "image_url" varchar(128) not null,
     UNIQUE ("product_name", "price", "color") 
 
 );

@@ -8,6 +8,7 @@ import (
 type Size interface {
 	CreateSize(models.SizeInput) (models.Size, error)
 	GetAllSize() ([]models.Size, error)
+	GetSizesById(int) (models.Size, error)
 	DeleteSize(int) error
 }
 
@@ -81,4 +82,17 @@ func (r *SizePostgres) DeleteSize(id int) error {
 	}
 
 	return nil
+}
+
+func (r *SizePostgres) GetSizesById(id int) (models.Size, error) {
+	var resp models.Size
+	queryDeleteSize := `SELECT * FROM sizes WHERE id=$1`
+
+	row := r.db.QueryRow(queryDeleteSize, id)
+	err := row.Scan(&resp.ID, &resp.SizeNum)
+	if err != nil {
+		return models.Size{}, err
+	}
+
+	return resp, nil
 }
