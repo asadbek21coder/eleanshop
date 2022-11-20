@@ -56,7 +56,7 @@ func (r *FeedbackPostgres) UpdateFeedback(id int, input models.UpdateFeedbackInp
 	args = append(args, id)
 
 	if input.UserId != nil {
-		setValues = append(setValues, fmt.Sprintf("name=$%d", argID))
+		setValues = append(setValues, fmt.Sprintf("user_id=$%d", argID))
 		args = append(args, *&input.UserId)
 		argID++
 	}
