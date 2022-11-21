@@ -89,7 +89,28 @@ func (h *Handler) getProductById(c *gin.Context) {
 
 func (h *Handler) getAllProducts(c *gin.Context) {
 
-	data, err := h.services.Product.GetAllProducts()
+	search := c.Query("search")
+
+	offset, err := h.parseOffsetQueryParam(c)
+	if err != nil {
+
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+
+	}
+
+	limit, err := h.parseLimitQueryParam(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+
+	}
+
+	data, err := h.services.Product.GetAllProducts(models.QueryParams{
+		Search: search,
+		Offset: offset,
+		Limit:  limit,
+	})
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

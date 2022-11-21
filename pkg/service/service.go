@@ -24,7 +24,7 @@ type Service struct {
 type Product interface {
 	CreateProduct(product models.ProductRequest) (int, error)
 	GetProductById(id int) (models.Product, error)
-	GetAllProducts() ([]models.Product, error)
+	GetAllProducts(models.QueryParams) ([]models.Product, error)
 	UpdateProduct(id int, product models.ProductRequest) (int, error)
 	DeleteProduct(id int) (int, error)
 }

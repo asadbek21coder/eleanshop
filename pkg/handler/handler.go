@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"strconv"
+
 	"github.com/asadbek21coder/eleanshop/pkg/service"
 	// "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -77,4 +79,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	}
 	router.Static("assets", "./assets")
 	return router
+}
+
+func (h *Handler) parseOffsetQueryParam(c *gin.Context) (int, error) {
+	return strconv.Atoi(c.DefaultQuery("offset", "10"))
+}
+
+func (h *Handler) parseLimitQueryParam(c *gin.Context) (int, error) {
+	return strconv.Atoi(c.DefaultQuery("limit", "0"))
 }

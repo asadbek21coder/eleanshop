@@ -22,9 +22,9 @@ func (r *ProductService) GetProductById(id int) (models.Product, error) {
 	return r.repo.GetProductById(id)
 }
 
-func (r *ProductService) GetAllProducts() ([]models.Product, error) {
+func (r *ProductService) GetAllProducts(queryParams models.QueryParams) ([]models.Product, error) {
 
-	return r.repo.GetAllProducts()
+	return r.repo.GetAllProducts(queryParams)
 }
 
 func (r *ProductService) UpdateProduct(id int, input models.ProductRequest) (int, error) {

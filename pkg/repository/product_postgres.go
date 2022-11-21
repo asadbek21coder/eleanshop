@@ -2,6 +2,9 @@ package repository
 
 import (
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/asadbek21coder/eleanshop/models"
 	"github.com/jmoiron/sqlx"
@@ -109,16 +112,46 @@ func (r *ProductPostgres) GetProductById(id int) (models.Product, error) {
 	return resp, nil
 }
 
-func (r *ProductPostgres) GetAllProducts() ([]models.Product, error) {
-	var resp []models.Product
+func (r *ProductPostgres) GetAllProducts(queryParams models.QueryParams) ([]models.Product, error) {
+	var (
+		resp   []models.Product
+		filter string
+		params = make(map[string]interface{})
+	)
+
+	if queryParams.Search != "" {
+		filter += " AND p.product_name ILIKE '%' || :search || '%' "
+		params["search"] = queryParams.Search
+	}
+	countQuery := `SELECT count(1) FROM products as p WHERE true ` + filter
+
+	var count int
+	q, arr := ReplaceQueryParams(countQuery, params)
+	err := r.db.QueryRow(q, arr...).Scan(
+		&count,
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("error while scanning count %w", err)
+	}
 
 	queryGetAllProducts := `SELECT id, product_name,category_id, (select name from categories as cat where cat.id=p.category_id), price, color, count, image_url 
-	FROM products as p`
+		FROM products as p WHERE true` + filter
+
+	queryGetAllProducts += " LIMIT :limit OFFSET :offset"
+	params["limit"] = queryParams.Limit
+	params["offset"] = queryParams.Offset
+
+	q, arr = ReplaceQueryParams(queryGetAllProducts, params)
+	row, err := r.db.Query(q, arr...)
+	if err != nil {
+		return nil, fmt.Errorf("error while getting rows %w", err)
+	}
 
 	queryGetProductSizes := `SELECT size_id FROM product_sizes WHERE product_id=$1`
 	queryGetSizeNums := `SELECT size_num from sizes WHERE id=$1`
 
-	row, err := r.db.Query(queryGetAllProducts)
+	// row, err := r.db.Query(queryGetAllProducts)
 
 	if err != nil {
 		return []models.Product{}, err
@@ -231,4 +264,20 @@ func (r *ProductPostgres) DeleteProduct(id int) (int, error) {
 	}
 
 	return resp, nil
+}
+func ReplaceQueryParams(namedQuery string, params map[string]interface{}) (string, []interface{}) {
+	var (
+		i    int = 1
+		args []interface{}
+	)
+
+	for k, v := range params {
+		if k != "" && strings.Contains(namedQuery, ":"+k) {
+			namedQuery = strings.ReplaceAll(namedQuery, ":"+k, "$"+strconv.Itoa(i))
+			args = append(args, v)
+			i++
+		}
+	}
+
+	return namedQuery, args
 }

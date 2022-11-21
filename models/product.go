@@ -73,3 +73,9 @@ type ResponseProduct struct {
 	ProductName string                `json:"product_name"`
 	Image       *multipart.FileHeader `json:"image"`
 }
+
+type QueryParams struct {
+	Offset int    `json:"offset"`
+	Limit  int    `json:"limit"`
+	Search string `json:"search"`
+}
