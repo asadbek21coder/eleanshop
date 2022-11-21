@@ -6,7 +6,8 @@ import (
 )
 
 type FeedbackService struct {
-	repo repository.Feedback
+	repo        repository.Feedback
+	productRepo repository.AuthPostgres
 }
 
 func NewFeedbackService(repo repository.Feedback) *FeedbackService {

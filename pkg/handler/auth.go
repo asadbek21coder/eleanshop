@@ -53,3 +53,23 @@ func (h *Handler) signin(c *gin.Context) {
 	})
 
 }
+
+func (h *Handler) setAdmin(c *gin.Context) {
+	var input models.SetAdmin
+
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err := h.services.Authorization.SetAdmin(input)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"Message": "OK",
+	})
+
+}

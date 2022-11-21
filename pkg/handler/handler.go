@@ -26,17 +26,19 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	}
 
-	admin := router.Group("/admin")
+	product := router.Group("/product")
 	{
-		product := admin.Group("/product")
-		{
 
-			product.POST("/", h.createProduct)
-			product.GET("/", h.getAllProducts)
-			product.GET("/:id", h.getProductById)
-			product.PUT("/:id", h.updateProduct)
-			product.DELETE("/:id", h.deleteProduct)
-		}
+		product.POST("/", h.isAdmin, h.createProduct)
+		product.GET("/", h.getAllProducts)
+		product.GET("/:id", h.getProductById)
+		product.PUT("/:id", h.isAdmin, h.updateProduct)
+		product.DELETE("/:id", h.isAdmin, h.deleteProduct)
+	}
+
+	admin := router.Group("/admin", h.isAdmin)
+	{
+		admin.PUT("/set-admin", h.setAdmin)
 
 		category := admin.Group("/category")
 		{
@@ -56,7 +58,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 	}
 
-	feedback := router.Group("/feedback")
+	feedback := router.Group("/feedback", h.userIdentity)
 	{
 		feedback.POST("/", h.createFeedback)
 		feedback.GET("/", h.getAllFeedbacks)
@@ -65,7 +67,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		feedback.DELETE("/:id", h.deleteFeedback)
 	}
 
-	question := router.Group("/question")
+	question := router.Group("/question", h.userIdentity)
 	{
 		question.POST("/", h.createQuestion)
 		question.GET("/", h.getAllQuestions)

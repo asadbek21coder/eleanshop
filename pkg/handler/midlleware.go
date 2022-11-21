@@ -2,21 +2,16 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	authorizationHeader = "Authorization"
-	userCtx             = "userId"
-)
-
 func (h *Handler) userIdentity(c *gin.Context) {
-	header := c.GetHeader(authorizationHeader)
+	header := c.GetHeader("Authorization")
 	if header == "" {
+		c.Abort()
 		newErrorResponse(c, http.StatusUnauthorized, "empty auth header")
 		return
 	}
@@ -32,17 +27,18 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
-	userId, err := h.services.Authorization.ParseToken(headerParts[1])
+	userId, isAdmin, err := h.services.Authorization.ParseToken(headerParts[1])
 	if err != nil {
 		newErrorResponse(c, http.StatusUnauthorized, err.Error())
 		return
 	}
-	fmt.Println(userId)
-	c.Set(userCtx, userId)
+	// fmt.Println(userId)
+	c.Set("userId", userId)
+	c.Set("isAdmin", isAdmin)
 }
 
 func getUserId(c *gin.Context) (int, error) {
-	id, ok := c.Get(userCtx)
+	id, ok := c.Get("userId")
 	if !ok {
 		return 0, errors.New("user id not found")
 	}
@@ -53,4 +49,24 @@ func getUserId(c *gin.Context) (int, error) {
 	}
 
 	return idInt, nil
+}
+
+func (h *Handler) isAdmin(c *gin.Context) {
+	h.userIdentity(c)
+	isAdmin, ok := c.Get("isAdmin")
+	if !ok {
+		return
+	}
+
+	isAdm, ok := isAdmin.(bool)
+	if !ok {
+		newErrorResponse(c, http.StatusUnauthorized, "isAdmin is invalid type")
+		return
+	}
+
+	if !isAdm {
+		newErrorResponse(c, http.StatusUnauthorized, "you are not admin")
+		return
+	}
+
 }

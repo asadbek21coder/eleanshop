@@ -29,9 +29,20 @@ func (r *AuthPostgres) CreateUser(user models.User) (int, error) {
 
 func (r *AuthPostgres) GetUser(username, password string) (models.User, error) {
 	var user models.User
-	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1 AND password_hash=$2", usersTable)
+	query := fmt.Sprintf("SELECT * FROM %s WHERE username=$1 AND password_hash=$2", usersTable)
 	err := r.db.Get(&user, query, username, password)
 
 	return user, err
 
+}
+
+func (r *AuthPostgres) SetAdmin(input models.SetAdmin) error {
+
+	query := `UPDATE users SET is_admin=$1 WHERE id=$2`
+	_, err := r.db.Exec(query, input.IsAdmin, input.UserId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

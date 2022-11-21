@@ -8,6 +8,7 @@ import (
 type Authorization interface {
 	CreateUser(user models.User) (int, error)
 	GetUser(username, password string) (models.User, error)
+	SetAdmin(input models.SetAdmin) error
 }
 
 type Category interface {
