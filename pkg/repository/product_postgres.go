@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -108,7 +109,6 @@ func (r *ProductPostgres) GetProductById(id int) (models.Product, error) {
 			return models.Product{}, err
 		}
 	}
-	resp.Sizes = availableSizes
 	return resp, nil
 }
 
@@ -118,7 +118,6 @@ func (r *ProductPostgres) GetAllProducts(queryParams models.QueryParams) ([]mode
 		filter string
 		params = make(map[string]interface{})
 	)
-
 	if queryParams.Search != "" {
 		filter += " AND p.product_name ILIKE '%' || :search || '%' "
 		params["search"] = queryParams.Search
@@ -135,8 +134,30 @@ func (r *ProductPostgres) GetAllProducts(queryParams models.QueryParams) ([]mode
 		return nil, fmt.Errorf("error while scanning count %w", err)
 	}
 
-	queryGetAllProducts := `SELECT id, product_name,category_id, (select name from categories as cat where cat.id=p.category_id), price, color, count, image_url 
-		FROM products as p WHERE true` + filter
+	queryGetAllProducts := `
+	
+	SELECT p.*,ct.name as category_name,
+	JSONB_AGG(
+		sz.size_num  
+	) available_sizes
+	FROM 
+		products as p
+	LEFT JOIN 
+		product_sizes as psz
+	ON 
+		psz.product_id=p.id
+	LEFT JOIN 
+		sizes as sz
+	ON 
+		sz.id=psz.size_id
+	LEFT JOIN 
+		categories as ct
+	ON
+		ct.id=p.category_id
+	WHERE true ` + filter + `
+	GROUP BY p.id, ct.name
+		`
+
 
 	queryGetAllProducts += " LIMIT :limit OFFSET :offset"
 	params["limit"] = queryParams.Limit
@@ -145,58 +166,37 @@ func (r *ProductPostgres) GetAllProducts(queryParams models.QueryParams) ([]mode
 	q, arr = ReplaceQueryParams(queryGetAllProducts, params)
 	row, err := r.db.Query(q, arr...)
 	if err != nil {
-		return nil, fmt.Errorf("error while getting rows %w", err)
-	}
-
-	queryGetProductSizes := `SELECT size_id FROM product_sizes WHERE product_id=$1`
-	queryGetSizeNums := `SELECT size_num from sizes WHERE id=$1`
-
-	// row, err := r.db.Query(queryGetAllProducts)
-
-	if err != nil {
 		return []models.Product{}, err
 	}
 	for row.Next() {
-		var size int
-		var sizeNum int
-		var availableSizes []int
-
 		var product models.Product
+		var available_sizes []uint8
+		var sizes []int
 		err := row.Scan(
+
 			&product.ID,
 			&product.ProductName,
 			&product.CategoryId,
-			&product.CategoryName,
 			&product.Price,
 			&product.Color,
 			&product.Count,
 			&product.ImageUrl,
+			&product.CategoryName,
+			&available_sizes,
 		)
-		if err != nil {
-			return []models.Product{}, err
-		}
-		row, err := r.db.Query(queryGetProductSizes, product.ID)
 
 		if err != nil {
 			return []models.Product{}, err
 		}
 
-		for row.Next() {
-			err := row.Scan(
-				&size,
-			)
-			if err != nil {
-				return []models.Product{}, err
-			}
-
-			err = r.db.Get(&sizeNum, queryGetSizeNums, size)
-			if err != nil {
-				return []models.Product{}, err
-			}
-			availableSizes = append(availableSizes, sizeNum)
+		err = json.Unmarshal([]byte(available_sizes), &sizes)
+		if err != nil {
+			return []models.Product{}, err
 		}
-		product.Sizes = availableSizes
+
+		product.AvailableSizes = sizes
 		resp = append(resp, product)
+
 	}
 
 	return resp, nil

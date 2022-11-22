@@ -23,7 +23,6 @@ func (r *ProductService) GetProductById(id int) (models.Product, error) {
 }
 
 func (r *ProductService) GetAllProducts(queryParams models.QueryParams) ([]models.Product, error) {
-
 	return r.repo.GetAllProducts(queryParams)
 }
 

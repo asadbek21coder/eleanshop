@@ -34,15 +34,15 @@ func (i ProductRequest) Validate() error {
 }
 
 type Product struct {
-	ID           int    `json:"id"`
-	ProductName  string `json:"product_name"`
-	CategoryId   int    `json:"category_id"`
-	Price        int    `json:"price"`
-	Color        string `json:"color"`
-	Count        int    `json:"count"`
-	CategoryName string `json:"category_name"`
-	Sizes        []int  `json:"available_sizes"`
-	ImageUrl     string `json:"image_url"`
+	ID             int    `json:"id"`
+	ProductName    string `json:"product_name"`
+	CategoryId     int    `json:"category_id"`
+	Price          int    `json:"price"`
+	Color          string `json:"color"`
+	Count          int    `json:"count"`
+	CategoryName   string `json:"category_name"`
+	ImageUrl       string `json:"image_url"`
+	AvailableSizes []int  `json:"available_sizes"`
 }
 
 type Category struct {
@@ -51,8 +51,8 @@ type Category struct {
 }
 
 type Size struct {
-	ID      int `json:"id"`
-	SizeNum int `json:"size_num"`
+	ID      int `json:"id" db:"id"`
+	SizeNum int `json:"size_num" db:"size_num"`
 }
 
 type AvailableSize struct {
@@ -78,4 +78,10 @@ type QueryParams struct {
 	Offset int    `json:"offset"`
 	Limit  int    `json:"limit"`
 	Search string `json:"search"`
+}
+
+type FakeProductModel struct {
+	ProductName    string `json:"product_name" db:"product_name"`
+	CategoryName   string `json:"category_name" db:"category_name"`
+	AvailableSizes []Size `json:"available_sizes"`
 }
