@@ -51,63 +51,68 @@ func (r *ProductPostgres) CreateProduct(product models.ProductRequest) (int, err
 
 func (r *ProductPostgres) GetProductById(id int) (models.Product, error) {
 	var resp models.Product
-	var availableSizes []int
 	tx, err := r.db.Begin()
 
 	if err != nil {
 		return models.Product{}, errors.New("transaction couldn`t begin")
 	}
 
-	queryGetProductById := `SELECT id, product_name,category_id, (select name from categories as cat where cat.id=p.category_id), price, color, count
-	FROM products as p WHERE id=$1`
-	queryGetAvailableSizes := `SELECT size_id FROM product_sizes WHERE product_id=$1`
-	queryGetSizeNums := `SELECT size_num from sizes WHERE id=$1`
+	queryGetProductById := `
+	SELECT p.*,ct.name as category_name,
+	JSONB_AGG(
+		sz.size_num  
+	) available_sizes
+	FROM 
+		products as p
+	LEFT JOIN 
+		product_sizes as psz
+	ON 
+		psz.product_id=p.id
+	LEFT JOIN 
+		sizes as sz
+	ON 
+		sz.id=psz.size_id
+	LEFT JOIN 
+		categories as ct
+	ON
+		ct.id=p.category_id
+	WHERE p.id=$1
+	GROUP BY p.id, ct.name
+	`
 
-	row, err := tx.Query(queryGetAvailableSizes, id)
+	row, err := tx.Query(queryGetProductById, id)
 	if err != nil {
-		tx.Rollback()
-		return models.Product{}, err
-	}
-
-	for row.Next() {
-		var sizeId int
-		var num int
-		err := row.Scan(
-			&sizeId,
-		)
-		if err != nil {
-			tx.Rollback()
-			return models.Product{}, err
-		}
-
-		err = r.db.Get(&num, queryGetSizeNums, sizeId)
-		if err != nil {
-			tx.Rollback()
-			return models.Product{}, err
-		}
-		availableSizes = append(availableSizes, num)
-
-	}
-
-	row, err = r.db.Query(queryGetProductById, id)
-	if err != nil {
-		tx.Rollback()
 		return models.Product{}, err
 	}
 	for row.Next() {
+		var available_sizes []uint8
+		var sizes []int
 		err := row.Scan(
+
 			&resp.ID,
 			&resp.ProductName,
 			&resp.CategoryId,
-			&resp.CategoryName,
 			&resp.Price,
 			&resp.Color,
 			&resp.Count,
+			&resp.ImageUrl,
+			&resp.CategoryName,
+			&available_sizes,
 		)
+
 		if err != nil {
 			tx.Rollback()
 			return models.Product{}, err
 		}
+
+		err = json.Unmarshal([]byte(available_sizes), &sizes)
+		if err != nil {
+			tx.Rollback()
+			return models.Product{}, err
+		}
+
+		resp.AvailableSizes = sizes
+
 	}
 	return resp, nil
 }
@@ -157,7 +162,6 @@ func (r *ProductPostgres) GetAllProducts(queryParams models.QueryParams) ([]mode
 	WHERE true ` + filter + `
 	GROUP BY p.id, ct.name
 		`
-
 
 	queryGetAllProducts += " LIMIT :limit OFFSET :offset"
 	params["limit"] = queryParams.Limit
