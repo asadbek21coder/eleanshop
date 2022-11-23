@@ -4,8 +4,9 @@ import (
 	"strconv"
 
 	"github.com/asadbek21coder/eleanshop/pkg/service"
-	// "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files" // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Handler struct {
@@ -21,7 +22,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	// config := cors.DefaultConfig()
 	// config.AllowOrigins = []string{"*"}
 	// router.Use(cors.New(config))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	auth := router.Group("/auth")
+
 	{
 		auth.POST("/signup", h.signup)
 		auth.POST("/signin", h.signin)

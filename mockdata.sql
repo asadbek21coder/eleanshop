@@ -1,20 +1,29 @@
-INSERT INTO "users" (name,username,password) VALUES (
+INSERT INTO "users" (name,username,password_hash) VALUES (
     'asadbek',
     'asadbek33',
     'a21code'
 );
 
-{
-    "name":"Nodir",
-    "username":"nod32",
-    "password": "nod32nodir"
-}
+INSERT INTO "users" (name,username,password_hash,is_admin) VALUES (
+    'Admin',
+    'admin',
+    'admin123',
+    true
+);
 
-{
-    "name":"Bobur",
-    "username":"sher03",
-    "password": "Bobursher"
-}
+INSERT INTO "users" (name,username,password_hash) VALUES (
+    'Nodir',
+    'nod32',
+    'nod32nodir'
+);
+
+INSERT INTO "users" (name,username,password_hash) VALUES (
+    'Bobur',
+    'sher03',
+    'Bobursher'
+);
+
+
 
 INSERT INTO "categories" ("category_name") VALUES ('accessories');
 INSERT INTO "categories" ("category_name") VALUES ('suits');
@@ -27,3 +36,4 @@ INSERT INTO "sizes" ("size_num") VALUES (32);
 INSERT INTO "sizes" ("size_num") VALUES (34);
 INSERT INTO "sizes" ("size_num") VALUES (36);
 INSERT INTO "sizes" ("size_num") VALUES (38);
+INSERT INTO "sizes" ("size_num") VALUES (40);

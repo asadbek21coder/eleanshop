@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"errors"
 	"net/http"
 	"strings"
 
@@ -37,19 +36,19 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	c.Set("isAdmin", isAdmin)
 }
 
-func getUserId(c *gin.Context) (int, error) {
-	id, ok := c.Get("userId")
-	if !ok {
-		return 0, errors.New("user id not found")
-	}
+// func getUserId(c *gin.Context) (int, error) {
+// 	id, ok := c.Get("userId")
+// 	if !ok {
+// 		return 0, errors.New("user id not found")
+// 	}
 
-	idInt, ok := id.(int)
-	if !ok {
-		return 0, errors.New("user id is of invalid type")
-	}
+// 	idInt, ok := id.(int)
+// 	if !ok {
+// 		return 0, errors.New("user id is of invalid type")
+// 	}
 
-	return idInt, nil
-}
+// 	return idInt, nil
+// }
 
 func (h *Handler) isAdmin(c *gin.Context) {
 	h.userIdentity(c)

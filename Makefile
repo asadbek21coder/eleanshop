@@ -14,5 +14,6 @@ migrate-up:
 
 migrate-down:
 	migrate -path ./schema -database 'postgres://postgres:asadbek@localhost:5432/eleanshop?sslmode=disable' down
-something_to_chek
 
+swag-init:
+	swag init -g cmd/main.go -o docs

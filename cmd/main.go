@@ -5,34 +5,29 @@ import (
 	"log"
 	"os"
 
-	"github.com/asadbek21coder/eleanshop/models"
+	"github.com/asadbek21coder/eleanshop"
 	"github.com/asadbek21coder/eleanshop/pkg/handler"
 	"github.com/asadbek21coder/eleanshop/pkg/repository"
 	"github.com/asadbek21coder/eleanshop/pkg/service"
 	"github.com/joho/godotenv"
 
+	_ "github.com/asadbek21coder/eleanshop/docs"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	// 	_ "github.com/swaggo/swag/cmd/swag@latest"
-	// 	"github.com/swaggo/gin-swagger"
-	// "github.com/swaggo/files"
 )
 
 // @title           Eleanshop
 // @version         1.0
-// @description     This is a sample server celler server.
-// @termsOfService  http://swagger.io/terms/
+// @description     API server for eleanshop website.
 
-// @contact.name   API Support
-// @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
+// @host localhost:8080
+// @BasePath /
 
-// @license.name  Apache 2.0
-// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
-// @host      localhost:8080
-// @BasePath  /api/v1
 func main() {
 
 	logrus.SetFormatter(new(logrus.JSONFormatter))
@@ -62,7 +57,7 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := new(models.Server)
+	srv := new(eleanshop.Server)
 
 	if err := srv.Run("8080", handlers.InitRoutes()); err != nil {
 		log.Fatalf("error occured while running http server: %s", err.Error())

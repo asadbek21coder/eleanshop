@@ -7,6 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary SignUp
+// @Tags auth
+// @Description create account
+// @ID create-account
+// @Accept  json
+// @Produce  json
+// @Param input body models.User true "account info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /auth/signup [post]
 func (h *Handler) signup(c *gin.Context) {
 	var input models.User
 
@@ -34,6 +46,18 @@ type signInInput struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// @Summary SignIn
+// @Tags auth
+// @Description login
+// @ID login
+// @Accept  json
+// @Produce  json
+// @Param input body signInInput true "credentials"
+// @Success 200 {string} string "token"
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /auth/signin [post]
 func (h *Handler) signin(c *gin.Context) {
 	var input signInInput
 
@@ -54,6 +78,18 @@ func (h *Handler) signin(c *gin.Context) {
 
 }
 
+// @Summary Set Admin
+// @Tags auth
+// @Description login
+// @ID admin
+// @Accept  json
+// @Produce  json
+// @Param input body models.SetAdmin true "credentials"
+// @Success 200 {string} string "Message"
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /admin/set-admin [put]
 func (h *Handler) setAdmin(c *gin.Context) {
 	var input models.SetAdmin
 
