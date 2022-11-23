@@ -79,6 +79,7 @@ func (h *Handler) signin(c *gin.Context) {
 }
 
 // @Summary Set Admin
+// @Security ApiKeyAuth
 // @Tags auth
 // @Description login
 // @ID admin
