@@ -75,9 +75,9 @@ type ResponseProduct struct {
 }
 
 type QueryParams struct {
-	Offset int    `json:"offset"`
-	Limit  int    `json:"limit"`
 	Search string `json:"search"`
+	Limit  int    `json:"limit"`
+	Offset int    `json:"offset"`
 }
 
 type FakeProductModel struct {

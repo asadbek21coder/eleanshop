@@ -85,9 +85,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 }
 
 func (h *Handler) parseOffsetQueryParam(c *gin.Context) (int, error) {
-	return strconv.Atoi(c.DefaultQuery("offset", "10"))
+	return strconv.Atoi(c.DefaultQuery("offset", "0"))
 }
 
 func (h *Handler) parseLimitQueryParam(c *gin.Context) (int, error) {
-	return strconv.Atoi(c.DefaultQuery("limit", "0"))
+	return strconv.Atoi(c.DefaultQuery("limit", "10"))
 }

@@ -202,7 +202,6 @@ func (r *ProductPostgres) GetAllProducts(queryParams models.QueryParams) ([]mode
 		resp = append(resp, product)
 
 	}
-
 	return resp, nil
 }
 

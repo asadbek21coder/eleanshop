@@ -15,6 +15,29 @@ definitions:
     - password
     - username
     type: object
+  models.Product:
+    properties:
+      available_sizes:
+        items:
+          type: integer
+        type: array
+      category_id:
+        type: integer
+      category_name:
+        type: string
+      color:
+        type: string
+      count:
+        type: integer
+      id:
+        type: integer
+      image_url:
+        type: string
+      price:
+        type: integer
+      product_name:
+        type: string
+    type: object
   models.SetAdmin:
     properties:
       is_admin:
@@ -161,6 +184,89 @@ paths:
       summary: SignUp
       tags:
       - auth
+  /product:
+    get:
+      consumes:
+      - application/json
+      description: get all products
+      operationId: get-all-products
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: string
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get All Products
+      tags:
+      - products
+  /product/{id}:
+    get:
+      description: get product by given id
+      operationId: get-product-by-id
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get Product By Id
+      tags:
+      - products
 securityDefinitions:
   ApiKeyAuth:
     in: header
