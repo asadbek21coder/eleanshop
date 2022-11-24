@@ -18,6 +18,11 @@ const docTemplate = `{
     "paths": {
         "/admin/set-admin": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "login",
                 "consumes": [
                     "application/json"
@@ -237,9 +242,6 @@ const docTemplate = `{
                 "username"
             ],
             "properties": {
-                "is_admin": {
-                    "type": "boolean"
-                },
                 "name": {
                     "type": "string"
                 },
