@@ -73,7 +73,7 @@ func (h *Handler) createProduct(c *gin.Context) {
 // @ID get-product-by-id
 // @Produce  json
 // @Param id path string true "product id"
-// @Success 200 {integer} models.Product
+// @Success 200 {object} models.Product
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
@@ -200,6 +200,19 @@ func (h *Handler) updateProduct(c *gin.Context) {
 	})
 }
 
+// @Summary Delete Product
+// @Security ApiKeyAuth
+// @Tags products
+// @Description delete product by given id
+// @ID delete-products
+// @Accept  json
+// @Produce  json
+// @Param id path string true "product id"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /product/{id} [delete]
 func (h *Handler) deleteProduct(c *gin.Context) {
 	var id int
 

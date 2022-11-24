@@ -43,42 +43,42 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	admin := router.Group("/admin", h.isAdmin)
 	{
-		admin.PUT("/set-admin", h.setAdmin)
+		admin.PUT("/set-admin")
 
 		category := admin.Group("/category")
 		{
-			category.POST("/", h.createCategory)
 			category.GET("/", h.getAllCategories)
+			category.POST("/", h.setAdmin, h.createCategory)
 			category.GET("/:id", h.getCategoryById)
-			category.PUT("/:id", h.updateCategory)
-			category.DELETE("/:id", h.deleteCategory)
+			category.PUT("/:id", h.setAdmin, h.updateCategory)
+			category.DELETE("/:id", h.setAdmin, h.deleteCategory)
 		}
 
 		sizes := admin.Group("/sizes")
 		{
-			sizes.POST("/", h.createSize)
+			sizes.POST("/", h.setAdmin, h.createSize)
 			sizes.GET("/", h.getAllSizes)
 			sizes.GET("/:id", h.getSizesById)
-			sizes.DELETE("/:id", h.deleteSize)
+			sizes.DELETE("/:id", h.setAdmin, h.deleteSize)
 		}
 	}
 
-	feedback := router.Group("/feedback", h.userIdentity)
+	feedback := router.Group("/feedback")
 	{
-		feedback.POST("/", h.createFeedback)
+		feedback.POST("/", h.userIdentity, h.createFeedback)
 		feedback.GET("/", h.getAllFeedbacks)
 		feedback.GET("/:id", h.getFeedbackById)
-		feedback.PUT("/:id", h.updateFeedback)
-		feedback.DELETE("/:id", h.deleteFeedback)
+		feedback.PUT("/:id", h.userIdentity, h.updateFeedback)
+		feedback.DELETE("/:id", h.userIdentity, h.deleteFeedback)
 	}
 
-	question := router.Group("/question", h.userIdentity)
+	question := router.Group("/question")
 	{
-		question.POST("/", h.createQuestion)
+		question.POST("/", h.userIdentity, h.createQuestion)
 		question.GET("/", h.getAllQuestions)
 		question.GET("/:id", h.getQuestionById)
-		question.PUT("/:id", h.updateQuestion)
-		question.DELETE("/:id", h.deleteQuestion)
+		question.PUT("/:id", h.userIdentity, h.updateQuestion)
+		question.DELETE("/:id", h.userIdentity, h.deleteQuestion)
 	}
 	router.Static("assets", "./assets")
 	return router
