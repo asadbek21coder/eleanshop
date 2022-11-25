@@ -14,8 +14,8 @@ func NewFeedbackService(repo repository.Feedback) *FeedbackService {
 	return &FeedbackService{repo: repo}
 }
 
-func (s *FeedbackService) CreateFeedback(feedback models.Feedback) (int, error) {
-	return s.repo.CreateFeedback(feedback)
+func (s *FeedbackService) CreateFeedback(feedback models.UpdateFeedbackInput, userId int) (int, error) {
+	return s.repo.CreateFeedback(feedback, userId)
 }
 
 func (s *FeedbackService) GetFeedbackById(id int) (models.Feedback, error) {
@@ -26,8 +26,8 @@ func (s *FeedbackService) GetAllFeedbacks() ([]models.Feedback, error) {
 	return s.repo.GetAllFeedbacks()
 }
 
-func (s *FeedbackService) UpdateFeedback(id int, input models.UpdateFeedbackInput) (models.Feedback, error) {
-	return s.repo.UpdateFeedback(id, input)
+func (s *FeedbackService) UpdateFeedback(id int, input models.UpdateFeedbackInput, userId *int) (models.Feedback, error) {
+	return s.repo.UpdateFeedback(id, input, userId)
 }
 
 func (s *FeedbackService) DeleteFeedback(id int) (int, error) {

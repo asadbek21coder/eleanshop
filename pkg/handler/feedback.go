@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -9,16 +8,35 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Create Feedback
+// @Security ApiKeyAuth
+// @Tags feedback
+// @Description create feedback
+// @ID create-feedback
+// @Accept  json
+// @Produce  json
+// @Param input body models.UpdateFeedbackInput true "feedback info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /feedback [post]
 func (h *Handler) createFeedback(c *gin.Context) {
-	var input models.Feedback
+	var input models.UpdateFeedbackInput
+	userId, _ := c.Get("userId")
+	userIdInt, ok := userId.(int)
+
+	if !ok {
+		newErrorResponse(c, http.StatusBadRequest, "invalid user_id type")
+		return
+	}
 
 	if err := c.BindJSON(&input); err != nil {
-		fmt.Println("this")
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 
-	data, err := h.services.Feedback.CreateFeedback(input)
+	data, err := h.services.Feedback.CreateFeedback(input, userIdInt)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -67,6 +85,14 @@ func (h *Handler) getAllFeedbacks(c *gin.Context) {
 }
 
 func (h *Handler) updateFeedback(c *gin.Context) {
+	userId, _ := c.Get("userId")
+	userIdInt, ok := userId.(int)
+
+	if !ok {
+		newErrorResponse(c, http.StatusBadRequest, "invalid user_id type")
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -80,7 +106,7 @@ func (h *Handler) updateFeedback(c *gin.Context) {
 		return
 	}
 
-	data, err := h.services.Feedback.UpdateFeedback(id, input)
+	data, err := h.services.Feedback.UpdateFeedback(id, input, &userIdInt)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

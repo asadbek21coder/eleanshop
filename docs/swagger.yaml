@@ -57,6 +57,17 @@ definitions:
       user_id:
         type: integer
     type: object
+  models.UpdateFeedbackInput:
+    properties:
+      email:
+        type: string
+      phone_number:
+        type: string
+      product_id:
+        type: integer
+      text:
+        type: string
+    type: object
   models.User:
     properties:
       name:
@@ -392,6 +403,47 @@ paths:
       summary: SignUp
       tags:
       - auth
+  /feedback:
+    post:
+      consumes:
+      - application/json
+      description: create feedback
+      operationId: create-feedback
+      parameters:
+      - description: feedback info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateFeedbackInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Feedback
+      tags:
+      - feedback
   /product:
     get:
       consumes:

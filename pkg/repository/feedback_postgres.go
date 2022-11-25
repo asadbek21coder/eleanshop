@@ -16,11 +16,11 @@ func NewFeedbackPostgres(db *sqlx.DB) *FeedbackPostgres {
 	return &FeedbackPostgres{db: db}
 }
 
-func (r *FeedbackPostgres) CreateFeedback(feedback models.Feedback) (int, error) {
+func (r *FeedbackPostgres) CreateFeedback(feedback models.UpdateFeedbackInput, userId int) (int, error) {
 	var id int
 	query := "INSERT INTO feedbacks (user_id, phone_number, email, text, product_id) VALUES ($1, $2, $3, $4, $5) RETURNING id;"
 
-	row := r.db.QueryRow(query, feedback.UserId, feedback.PhoneNumber, feedback.Email, feedback.Text, feedback.ProductId)
+	row := r.db.QueryRow(query, userId, feedback.PhoneNumber, feedback.Email, feedback.Text, feedback.ProductId)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
@@ -48,16 +48,16 @@ func (r *FeedbackPostgres) GetAllFeedbacks() ([]models.Feedback, error) {
 	return feedbacks, err
 }
 
-func (r *FeedbackPostgres) UpdateFeedback(id int, input models.UpdateFeedbackInput) (models.Feedback, error) {
+func (r *FeedbackPostgres) UpdateFeedback(id int, input models.UpdateFeedbackInput, userId *int) (models.Feedback, error) {
 	var fb models.Feedback
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argID := 2
 	args = append(args, id)
 
-	if input.UserId != nil {
+	if userId != nil {
 		setValues = append(setValues, fmt.Sprintf("user_id=$%d", argID))
-		args = append(args, input.UserId)
+		args = append(args, userId)
 		argID++
 	}
 

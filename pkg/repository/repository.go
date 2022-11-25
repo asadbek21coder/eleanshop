@@ -28,10 +28,10 @@ type Product interface {
 }
 
 type Feedback interface {
-	CreateFeedback(feedback models.Feedback) (int, error)
+	CreateFeedback(feedback models.UpdateFeedbackInput, userId int) (int, error)
 	GetFeedbackById(id int) (models.Feedback, error)
 	GetAllFeedbacks() ([]models.Feedback, error)
-	UpdateFeedback(id int, input models.UpdateFeedbackInput) (models.Feedback, error)
+	UpdateFeedback(id int, input models.UpdateFeedbackInput, userId *int) (models.Feedback, error)
 	DeleteFeedback(id int) (int, error)
 }
 type Question interface {
