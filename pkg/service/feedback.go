@@ -30,6 +30,6 @@ func (s *FeedbackService) UpdateFeedback(id int, input models.UpdateFeedbackInpu
 	return s.repo.UpdateFeedback(id, input, userId)
 }
 
-func (s *FeedbackService) DeleteFeedback(id int) (int, error) {
-	return s.repo.DeleteFeedback(id)
+func (s *FeedbackService) DeleteFeedback(id int, userId int) (int, error) {
+	return s.repo.DeleteFeedback(id, userId)
 }

@@ -444,6 +444,46 @@ paths:
       summary: Create Feedback
       tags:
       - feedback
+  /feedback/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete feedback by given id
+      operationId: delete-feedback
+      parameters:
+      - description: feedback id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Feedback
+      tags:
+      - feedback
   /product:
     get:
       consumes:

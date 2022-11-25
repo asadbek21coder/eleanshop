@@ -93,8 +93,8 @@ func (r *FeedbackPostgres) UpdateFeedback(id int, input models.UpdateFeedbackInp
 	return fb, err
 }
 
-func (r *FeedbackPostgres) DeleteFeedback(id int) (int, error) {
-	query := "DELETE FROM feedbacks WHERE id = $1"
-	_, err := r.db.Exec(query, id)
+func (r *FeedbackPostgres) DeleteFeedback(id int, userId int) (int, error) {
+	query := "DELETE FROM feedbacks WHERE id = $1 AND user_id=$2 returning id"
+	_, err := r.db.Query(query, id, userId)
 	return id, err
 }

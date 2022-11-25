@@ -8,7 +8,7 @@ INSERT INTO "users" (name,username,password_hash,is_admin) VALUES (
     'Admin',
     'admin',
     'admin123',
-    true
+     true
 );
 
 INSERT INTO "users" (name,username,password_hash) VALUES (

@@ -1,0 +1,4 @@
+1. feedback/delete userId token
+2. question/CRUD check userId by token
+3. swagger for all endpoints
+4. swagger for file upload fix problem

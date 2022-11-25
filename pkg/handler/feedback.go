@@ -119,14 +119,34 @@ func (h *Handler) updateFeedback(c *gin.Context) {
 	})
 }
 
+// @Summary Delete Feedback
+// @Security ApiKeyAuth
+// @Tags feedback
+// @Description delete feedback by given id
+// @ID delete-feedback
+// @Accept  json
+// @Produce  json
+// @Param id path string true "feedback id"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /feedback/{id} [delete]
 func (h *Handler) deleteFeedback(c *gin.Context) {
+	userId, _ := c.Get("userId")
+	userIdInt, ok := userId.(int)
+
+	if !ok {
+		newErrorResponse(c, http.StatusBadRequest, "invalid user_id type")
+		return
+	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	_, err = h.services.Feedback.DeleteFeedback(id)
+	_, err = h.services.Feedback.DeleteFeedback(id, userIdInt)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
