@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -62,6 +63,7 @@ func (h *Handler) getAllSizes(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+	fmt.Println("working")
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"data":    data,
@@ -113,7 +115,7 @@ func (h *Handler) deleteSize(c *gin.Context) {
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /sizes/{id} [get]
+// @Router /admin/sizes/{id} [get]
 func (h *Handler) getSizesById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

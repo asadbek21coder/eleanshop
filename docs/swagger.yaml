@@ -494,6 +494,43 @@ paths:
       summary: Delete Size
       tags:
       - size
+    get:
+      description: get size by given id
+      operationId: get-size-by-id
+      parameters:
+      - description: size id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Size'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Size By Id
+      tags:
+      - size
   /auth/signin:
     post:
       consumes:
@@ -1086,44 +1123,6 @@ paths:
       summary: Update Question
       tags:
       - question
-  /sizes/{id}:
-    get:
-      description: get size by given id
-      operationId: get-size-by-id
-      parameters:
-      - description: size id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Size'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Get Size By Id
-      tags:
-      - size
 securityDefinitions:
   ApiKeyAuth:
     in: header
