@@ -13,7 +13,7 @@ func NewQuestionService(repo repository.Question) *QuestionService {
 	return &QuestionService{repo: repo}
 }
 
-func (s *QuestionService) CreateQuestion(question models.Question) (int, error) {
+func (s *QuestionService) CreateQuestion(question models.UpdateQuestionInput) (int, error) {
 	return s.repo.CreateQuestion(question)
 }
 

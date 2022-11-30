@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type categoryPost struct {
+type CategoryPost struct {
 	Name string `json:"name"`
 }
 
@@ -18,17 +18,17 @@ type categoryPost struct {
 // @ID create-category
 // @Accept  json
 // @Produce  json
-// @Param input body categoryPost true "category info"
+// @Param input body CategoryPost true "category info"
 // @Success 200 {integer} integer 1
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /admin/category [post]
 func (h *Handler) createCategory(c *gin.Context) {
-	var input categoryPost
+	var input CategoryPost
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -46,8 +46,8 @@ func (h *Handler) createCategory(c *gin.Context) {
 }
 
 // @Summary Get Category By Id
-// @Security ApiKeyAuth
 // @Tags category
+// @Security ApiKeyAuth
 // @Description get category by given id
 // @ID get-category-by-id
 // @Produce  json
@@ -79,6 +79,7 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 
 // @Summary Get All Categories
 // @Tags category
+// @Security ApiKeyAuth
 // @Description get all categories
 // @ID get-all-categories
 // @Accept  json
@@ -109,7 +110,7 @@ func (h *Handler) getAllCategories(c *gin.Context) {
 // @ID update-category
 // @Accept  json
 // @Produce  json
-// @Param input body categoryPost true "category info"
+// @Param input body CategoryPost true "category info"
 // @Param id path string true "category id"
 // @Success 200 {integer} integer 1
 // @Failure 400,404 {object} errorResponse
@@ -117,7 +118,7 @@ func (h *Handler) getAllCategories(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /admin/category/{id} [put]
 func (h *Handler) updateCategory(c *gin.Context) {
-	var input categoryPost
+	var input CategoryPost
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())

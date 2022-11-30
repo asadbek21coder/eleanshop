@@ -25,6 +25,16 @@ type FakeProduct struct {
 	Image       *multipart.FileHeader `form:"image" binding:"required"`
 }
 
+type FakeProduct2 struct {
+	ProductName string                `form:"product_name"`
+	CategoryId  string                `form:"category_id"`
+	Price       string                `form:"price"`
+	Color       string                `form:"color"`
+	Count       string                `form:"count"`
+	Sizes       string                `form:"sizes"`
+	Image       *multipart.FileHeader `form:"image" binding:"required"`
+}
+
 func (i ProductRequest) Validate() error {
 	if i.ProductName == "" && i.CategoryId == 0 && i.Price == 0 && i.Color == "" && i.Count == 0 {
 		return errors.New("update structure has no values")

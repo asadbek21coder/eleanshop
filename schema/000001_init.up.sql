@@ -52,3 +52,5 @@ CREATE TABLE "questions" (
     "time" varchar(128) not null,
     "text" varchar(256) not null
 );
+
+

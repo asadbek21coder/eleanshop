@@ -35,7 +35,7 @@ type Feedback interface {
 	DeleteFeedback(id int, userId int) (int, error)
 }
 type Question interface {
-	CreateQuestion(question models.Question) (int, error)
+	CreateQuestion(question models.UpdateQuestionInput) (int, error)
 	GetQuestionById(id int) (models.Question, error)
 	GetAllQuestions() ([]models.Question, error)
 	UpdateQuestion(id int, input models.UpdateQuestionInput) (models.Question, error)

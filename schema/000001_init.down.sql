@@ -1,7 +1,7 @@
-DROP TABLE "users";
+DROP TABLE "questions";
 DROP TABLE "product_sizes";
-DROP TABLE "products";
-DROP TABLE "categories";
 DROP TABLE "sizes";
 DROP TABLE "feedbacks";
-DROP TABLE "questions";
+DROP TABLE "users";
+DROP TABLE "products";
+DROP TABLE "categories";

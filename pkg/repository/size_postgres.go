@@ -25,7 +25,7 @@ func (r *SizePostgres) CreateSize(size models.SizeInput) (models.Size, error) {
 
 	queryCreateSize := `INSERT INTO sizes (size_num) VALUES ($1) RETURNING *`
 
-	row, err := r.db.Query(queryCreateSize, size.SizeNum)
+	row, err := r.db.Query(queryCreateSize, size)
 
 	if err != nil {
 		return models.Size{}, err

@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  handler.categoryPost:
+  handler.CategoryPost:
     properties:
       name:
         type: string
@@ -27,6 +27,21 @@ definitions:
       id:
         type: integer
     type: object
+  models.Feedback:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      phone_number:
+        type: string
+      product_id:
+        type: integer
+      text:
+        type: string
+      user_id:
+        type: integer
+    type: object
   models.Product:
     properties:
       available_sizes:
@@ -50,11 +65,36 @@ definitions:
       product_name:
         type: string
     type: object
+  models.Question:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      phone_number:
+        type: string
+      text:
+        type: string
+      time:
+        type: string
+    type: object
   models.SetAdmin:
     properties:
       is_admin:
         type: boolean
       user_id:
+        type: integer
+    type: object
+  models.Size:
+    properties:
+      id:
+        type: integer
+      size_num:
+        type: integer
+    type: object
+  models.SizeInput:
+    properties:
+      size_num:
         type: integer
     type: object
   models.UpdateFeedbackInput:
@@ -65,6 +105,17 @@ definitions:
         type: string
       product_id:
         type: integer
+      text:
+        type: string
+    type: object
+  models.UpdateQuestionInput:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
       text:
         type: string
     type: object
@@ -119,6 +170,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get All Categories
       tags:
       - category
@@ -133,7 +186,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handler.categoryPost'
+          $ref: '#/definitions/handler.CategoryPost'
       produces:
       - application/json
       responses:
@@ -250,7 +303,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handler.categoryPost'
+          $ref: '#/definitions/handler.CategoryPost'
       - description: category id
         in: path
         name: id
@@ -325,6 +378,122 @@ paths:
       summary: Set Admin
       tags:
       - auth
+  /admin/sizes:
+    get:
+      consumes:
+      - application/json
+      description: get all sizes
+      operationId: get-all-sizes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Size'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Size
+      tags:
+      - size
+    post:
+      consumes:
+      - application/json
+      description: create size by given id
+      operationId: create-size
+      parameters:
+      - description: size info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SizeInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Size
+      tags:
+      - size
+  /admin/sizes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete size by given id
+      operationId: delete-size
+      parameters:
+      - description: size id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Size
+      tags:
+      - size
   /auth/signin:
     post:
       consumes:
@@ -404,6 +573,39 @@ paths:
       tags:
       - auth
   /feedback:
+    get:
+      consumes:
+      - application/json
+      description: get all feedbacks
+      operationId: get-all-feedbacks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Feedback'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get All Feedbacks
+      tags:
+      - feedback
     post:
       consumes:
       - application/json
@@ -482,6 +684,88 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Delete Feedback
+      tags:
+      - feedback
+    get:
+      description: get feedback by given id
+      operationId: get-feedback-by-id
+      parameters:
+      - description: feedback id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Feedback'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Feedback By Id
+      tags:
+      - feedback
+    put:
+      consumes:
+      - application/json
+      description: update feedback
+      operationId: update-feedback
+      parameters:
+      - description: feedback info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateFeedbackInput'
+      - description: feedback id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Feedback
       tags:
       - feedback
   /product:
@@ -606,6 +890,240 @@ paths:
       summary: Get Product By Id
       tags:
       - products
+  /question:
+    get:
+      consumes:
+      - application/json
+      description: get all questions
+      operationId: get-all-questions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Question'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get All Questions
+      tags:
+      - question
+    post:
+      consumes:
+      - application/json
+      description: create question by given id
+      operationId: create-question
+      parameters:
+      - description: question info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateQuestionInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Question
+      tags:
+      - question
+  /question/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete question by given id
+      operationId: delete-question
+      parameters:
+      - description: question id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Question
+      tags:
+      - question
+    get:
+      description: get question by given id
+      operationId: get-question-by-id
+      parameters:
+      - description: question id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Question'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Question By Id
+      tags:
+      - question
+    put:
+      consumes:
+      - application/json
+      description: update question
+      operationId: update-question
+      parameters:
+      - description: question info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateQuestionInput'
+      - description: question id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Question
+      tags:
+      - question
+  /sizes/{id}:
+    get:
+      description: get size by given id
+      operationId: get-size-by-id
+      parameters:
+      - description: size id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Size'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Size By Id
+      tags:
+      - size
 securityDefinitions:
   ApiKeyAuth:
     in: header

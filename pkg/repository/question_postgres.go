@@ -16,7 +16,7 @@ func NewQuestionPostgres(db *sqlx.DB) *QuestionPostgres {
 	return &QuestionPostgres{db: db}
 }
 
-func (r *QuestionPostgres) CreateQuestion(question models.Question) (int, error) {
+func (r *QuestionPostgres) CreateQuestion(question models.UpdateQuestionInput) (int, error) {
 	var id int
 	query := "INSERT INTO questions (name, phone_number, time, text) VALUES ($1, $2, $3, $4) RETURNING id;"
 
