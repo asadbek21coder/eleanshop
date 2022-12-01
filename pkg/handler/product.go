@@ -26,7 +26,7 @@ func (h *Handler) createProduct(c *gin.Context) {
 	var request models.ProductRequest
 	var req2 models.FakeProduct2
 
-	if err := c.BindJSON(&req2); err != nil {
+	if err := c.ShouldBind(&req2); err != nil {
 		fmt.Println("this")
 		newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
 		return
