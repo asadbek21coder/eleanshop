@@ -34,7 +34,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	product := router.Group("/product")
 	{
 
-		product.POST("/", h.isAdmin, h.createProduct)
+		product.POST("/", h.createProduct)
 		product.GET("/", h.getAllProducts)
 		product.GET("/:id", h.getProductById)
 		product.PUT("/:id", h.isAdmin, h.updateProduct)
@@ -43,7 +43,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	admin := router.Group("/admin", h.isAdmin)
 	{
-		admin.PUT("/set-admin")
+		admin.PUT("/set-admin", h.isAdmin, h.setAdmin)
 
 		category := admin.Group("/category")
 		{

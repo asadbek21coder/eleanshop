@@ -41,8 +41,8 @@ func (h *Handler) createSize(c *gin.Context) {
 		"isOk":    true,
 		"message": "OK",
 	})
-
 }
+
 
 // @Summary Get All Size
 // @Security ApiKeyAuth

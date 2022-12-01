@@ -24,14 +24,13 @@ func (h *Handler) createProduct(c *gin.Context) {
 
 	var userObj models.FakeProduct
 	var request models.ProductRequest
-	var req2 models.FakeProduct2
-	fmt.Println(c)
 
-	if err := c.ShouldBind(&req2); err != nil {
+	if err := c.ShouldBind(&userObj); err != nil {
 		fmt.Println("this")
 		newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
 		return
 	}
+	fmt.Println("after")
 
 	err := c.SaveUploadedFile(userObj.Image, "assets/images/"+userObj.Image.Filename)
 	if err != nil {
@@ -53,14 +52,12 @@ func (h *Handler) createProduct(c *gin.Context) {
 
 	request.Sizes = sizes
 	request.ImageUrl = "assets/images/" + userObj.Image.Filename
-	fmt.Println(request)
 
 	data, err := h.services.Product.CreateProduct(request)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	fmt.Println(data)
 
 	c.JSON(http.StatusCreated, map[string]interface{}{
 		"data":    data,
@@ -132,11 +129,6 @@ func (h *Handler) getAllProducts(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	fmt.Println(models.QueryParams{
-		Search: search,
-		Limit:  limit,
-		Offset: offset,
-	}, search, limit, offset)
 
 	data, err := h.services.Product.GetAllProducts(models.QueryParams{
 		Search: search,
