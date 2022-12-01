@@ -26,19 +26,16 @@ func (h *Handler) createProduct(c *gin.Context) {
 	var request models.ProductRequest
 
 	if err := c.ShouldBind(&userObj); err != nil {
-		fmt.Println("this1")
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body: "+err.Error())
 		return
 	}
 	file, err := c.FormFile("image")
 	if err != nil {
-		fmt.Println("this2")
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
 		return
 	}
 	err = c.SaveUploadedFile(file, "assets/images/"+file.Filename)
 	if err != nil {
-		fmt.Println("this3")
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
 		fmt.Println("error: ", err)
 	}
@@ -150,51 +147,53 @@ func (h *Handler) getAllProducts(c *gin.Context) {
 }
 
 func (h *Handler) updateProduct(c *gin.Context) {
-	// var userObj models.FakeProduct
-	// var request models.ProductRequest
+	var userObj models.FakeProduct
+	var request models.ProductRequest
 
-	// if err := c.ShouldBind(&userObj); err != nil {
-	// 	newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
-	// 	return
-	// }
+	if err := c.ShouldBind(&userObj); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body: "+err.Error())
+		return
+	}
+	file, err := c.FormFile("image")
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		return
+	}
+	err = c.SaveUploadedFile(file, "assets/images/"+file.Filename)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		fmt.Println("error: ", err)
+	}
+	sizes, err := convertToIntSlice(userObj.Sizes)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		return
+	}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid product id param")
+		return
+	}
+	request.ProductName = userObj.ProductName
+	request.CategoryId = userObj.CategoryId
+	request.Price = userObj.Price
+	request.Color = userObj.Color
+	request.Count = userObj.Count
+	request.Sizes = sizes
+	request.ImageUrl = "assets/images/" + file.Filename
 
-	// err := c.SaveUploadedFile(userObj.Image, "assets/images/"+userObj.Image.Filename)
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
-	// 	return
-	// }
-
-	// sizes, err := convertToIntSlice(userObj.Sizes)
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusBadRequest, "invalid input body")
-	// 	return
-	// }
-
-	// request.ProductName = userObj.ProductName
-	// request.CategoryId = userObj.CategoryId
-	// request.Price = userObj.Price
-	// request.Color = userObj.Color
-	// request.Count = userObj.Count
-	// request.Sizes = sizes
-	// request.ImageUrl = "assets/images/" + userObj.Image.Filename
-
-	// id, err := strconv.Atoi(c.Param("id"))
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
-	// 	return
-	// }
-
-	// data, err := h.services.Product.UpdateProduct(id, request)
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	// 	return
-	// }
+	data, err := h.services.Product.UpdateProduct(id, request)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(http.StatusCreated, map[string]interface{}{
-		"data":    "data",
+		"data":    data,
 		"isOk":    true,
 		"message": "OK",
 	})
+
 }
 
 // @Summary Delete Product
