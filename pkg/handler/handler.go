@@ -48,18 +48,18 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		category := admin.Group("/category")
 		{
 			category.GET("/", h.getAllCategories)
-			category.POST("/", h.setAdmin, h.createCategory)
+			category.POST("/", h.isAdmin, h.createCategory)
 			category.GET("/:id", h.getCategoryById)
-			category.PUT("/:id", h.setAdmin, h.updateCategory)
-			category.DELETE("/:id", h.setAdmin, h.deleteCategory)
+			category.PUT("/:id", h.isAdmin, h.updateCategory)
+			category.DELETE("/:id", h.isAdmin, h.deleteCategory)
 		}
 
 		sizes := admin.Group("/sizes")
 		{
-			sizes.POST("/", h.setAdmin, h.createSize)
+			sizes.POST("/", h.isAdmin, h.createSize)
 			sizes.GET("/", h.getAllSizes)
 			sizes.GET("/:id", h.getSizesById)
-			sizes.DELETE("/:id", h.setAdmin, h.deleteSize)
+			sizes.DELETE("/:id", h.isAdmin, h.deleteSize)
 		}
 	}
 
