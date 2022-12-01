@@ -24,36 +24,36 @@ func (h *Handler) createProduct(c *gin.Context) {
 
 	var userObj models.FakeProduct
 	var request models.ProductRequest
-	var req2 models.FakeProduct2
 
-	if err := c.ShouldBind(&req2); err != nil {
-		fmt.Println("this")
-		newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
+	if err := c.ShouldBind(&userObj); err != nil {
+		fmt.Println("this1")
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body: "+err.Error())
 		return
 	}
-	fmt.Println("after")
-	fmt.Println(req2)
-
-	err := c.SaveUploadedFile(userObj.Image, "assets/images/"+userObj.Image.Filename)
+	file, err := c.FormFile("image")
+	if err != nil {
+		fmt.Println("this2")
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		return
+	}
+	err = c.SaveUploadedFile(file, "assets/images/"+file.Filename)
+	if err != nil {
+		fmt.Println("this3")
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		fmt.Println("error: ", err)
+	}
+	sizes, err := convertToIntSlice(userObj.Sizes)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
 		return
 	}
-
-	sizes, err := convertToIntSlice(userObj.Sizes)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
-		return
-	}
-
 	request.ProductName = userObj.ProductName
 	request.CategoryId = userObj.CategoryId
 	request.Price = userObj.Price
 	request.Color = userObj.Color
 	request.Count = userObj.Count
-
 	request.Sizes = sizes
-	request.ImageUrl = "assets/images/" + userObj.Image.Filename
+	request.ImageUrl = "assets/images/" + file.Filename
 
 	data, err := h.services.Product.CreateProduct(request)
 	if err != nil {
@@ -150,48 +150,48 @@ func (h *Handler) getAllProducts(c *gin.Context) {
 }
 
 func (h *Handler) updateProduct(c *gin.Context) {
-	var userObj models.FakeProduct
-	var request models.ProductRequest
+	// var userObj models.FakeProduct
+	// var request models.ProductRequest
 
-	if err := c.ShouldBind(&userObj); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
-		return
-	}
+	// if err := c.ShouldBind(&userObj); err != nil {
+	// 	newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
+	// 	return
+	// }
 
-	err := c.SaveUploadedFile(userObj.Image, "assets/images/"+userObj.Image.Filename)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
-		return
-	}
+	// err := c.SaveUploadedFile(userObj.Image, "assets/images/"+userObj.Image.Filename)
+	// if err != nil {
+	// 	newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+	// 	return
+	// }
 
-	sizes, err := convertToIntSlice(userObj.Sizes)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
-		return
-	}
+	// sizes, err := convertToIntSlice(userObj.Sizes)
+	// if err != nil {
+	// 	newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+	// 	return
+	// }
 
-	request.ProductName = userObj.ProductName
-	request.CategoryId = userObj.CategoryId
-	request.Price = userObj.Price
-	request.Color = userObj.Color
-	request.Count = userObj.Count
-	request.Sizes = sizes
-	request.ImageUrl = "assets/images/" + userObj.Image.Filename
+	// request.ProductName = userObj.ProductName
+	// request.CategoryId = userObj.CategoryId
+	// request.Price = userObj.Price
+	// request.Color = userObj.Color
+	// request.Count = userObj.Count
+	// request.Sizes = sizes
+	// request.ImageUrl = "assets/images/" + userObj.Image.Filename
 
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
-		return
-	}
+	// id, err := strconv.Atoi(c.Param("id"))
+	// if err != nil {
+	// 	newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
+	// 	return
+	// }
 
-	data, err := h.services.Product.UpdateProduct(id, request)
-	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
+	// data, err := h.services.Product.UpdateProduct(id, request)
+	// if err != nil {
+	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
+	// 	return
+	// }
 
 	c.JSON(http.StatusCreated, map[string]interface{}{
-		"data":    data,
+		"data":    "data",
 		"isOk":    true,
 		"message": "OK",
 	})
