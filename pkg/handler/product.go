@@ -24,13 +24,15 @@ func (h *Handler) createProduct(c *gin.Context) {
 
 	var userObj models.FakeProduct
 	var request models.ProductRequest
+	var req2 models.FakeProduct2
 
-	if err := c.ShouldBind(&userObj); err != nil {
+	if err := c.BindJSON(&req2); err != nil {
 		fmt.Println("this")
 		newErrorResponse(c, http.StatusBadRequest, "bad request: "+err.Error())
 		return
 	}
 	fmt.Println("after")
+	fmt.Println(req2)
 
 	err := c.SaveUploadedFile(userObj.Image, "assets/images/"+userObj.Image.Filename)
 	if err != nil {

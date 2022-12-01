@@ -26,13 +26,13 @@ type FakeProduct struct {
 }
 
 type FakeProduct2 struct {
-	ProductName string                `form:"product_name"`
-	CategoryId  string                `form:"category_id"`
-	Price       string                `form:"price"`
-	Color       string                `form:"color"`
-	Count       string                `form:"count"`
-	Sizes       string                `form:"sizes"`
-	Image       *multipart.FileHeader `form:"image" binding:"required"`
+	ProductName string `form:"product_name"`
+	CategoryId  int    `form:"category_id"`
+	Price       int    `form:"price"`
+	Color       string `form:"color"`
+	Count       int    `form:"count"`
+	Sizes       string `form:"sizes"`
+	// Image       *multipart.FileHeader `form:"image" binding:"required"`
 }
 
 func (i ProductRequest) Validate() error {
