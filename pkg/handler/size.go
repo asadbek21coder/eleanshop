@@ -21,7 +21,7 @@ import (
 // @Failure     400,404 {object}  errorResponse
 // @Failure     500     {object}  errorResponse
 // @Failure     default {object}  errorResponse
-// @Router      /admin/sizes [post]
+// @Router      /sizes [post]
 func (h *Handler) createSize(c *gin.Context) {
 	var input models.SizeInput
 
@@ -53,7 +53,7 @@ func (h *Handler) createSize(c *gin.Context) {
 // @Failure     400,404 {object} errorResponse
 // @Failure     500     {object} errorResponse
 // @Failure     default {object} errorResponse
-// @Router      /admin/sizes [get]
+// @Router      /sizes [get]
 func (h *Handler) getAllSizes(c *gin.Context) {
 
 	data, err := h.services.Size.GetAllSize()
@@ -82,7 +82,7 @@ func (h *Handler) getAllSizes(c *gin.Context) {
 // @Failure     400,404 {object}  errorResponse
 // @Failure     500     {object}  errorResponse
 // @Failure     default {object}  errorResponse
-// @Router      /admin/sizes/{id} [delete]
+// @Router      /sizes/{id} [delete]
 func (h *Handler) deleteSize(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -112,7 +112,7 @@ func (h *Handler) deleteSize(c *gin.Context) {
 // @Failure     400,404 {object} errorResponse
 // @Failure     500     {object} errorResponse
 // @Failure     default {object} errorResponse
-// @Router      /admin/sizes/{id} [get]
+// @Router      /sizes/{id} [get]
 func (h *Handler) getSizesById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

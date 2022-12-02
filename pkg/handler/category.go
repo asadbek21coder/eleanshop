@@ -23,7 +23,7 @@ type CategoryPost struct {
 // @Failure     400,404 {object}  errorResponse
 // @Failure     500     {object}  errorResponse
 // @Failure     default {object}  errorResponse
-// @Router      /admin/category [post]
+// @Router      /category [post]
 func (h *Handler) createCategory(c *gin.Context) {
 	var input CategoryPost
 
@@ -55,7 +55,7 @@ func (h *Handler) createCategory(c *gin.Context) {
 // @Failure     400,404 {object} errorResponse
 // @Failure     500     {object} errorResponse
 // @Failure     default {object} errorResponse
-// @Router      /admin/category/{id} [get]
+// @Router      /category/{id} [get]
 func (h *Handler) getCategoryById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -86,7 +86,7 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 // @Failure     400,404 {object} errorResponse
 // @Failure     500     {object} errorResponse
 // @Failure     default {object} errorResponse
-// @Router      /admin/category [get]
+// @Router      /category [get]
 func (h *Handler) getAllCategories(c *gin.Context) {
 	data, err := h.services.GetAllCategories()
 	if err != nil {
@@ -114,7 +114,7 @@ func (h *Handler) getAllCategories(c *gin.Context) {
 // @Failure     400,404 {object}  errorResponse
 // @Failure     500     {object}  errorResponse
 // @Failure     default {object}  errorResponse
-// @Router      /admin/category/{id} [put]
+// @Router      /category/{id} [put]
 func (h *Handler) updateCategory(c *gin.Context) {
 	var input CategoryPost
 	id, err := strconv.Atoi(c.Param("id"))
@@ -153,7 +153,7 @@ func (h *Handler) updateCategory(c *gin.Context) {
 // @Failure     400,404 {object}  errorResponse
 // @Failure     500     {object}  errorResponse
 // @Failure     default {object}  errorResponse
-// @Router      /admin/category/{id} [delete]
+// @Router      /category/{id} [delete]
 func (h *Handler) deleteCategory(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

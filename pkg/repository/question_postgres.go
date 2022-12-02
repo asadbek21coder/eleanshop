@@ -52,7 +52,7 @@ func (r *QuestionPostgres) UpdateQuestion(id int, input models.UpdateQuestionInp
 	var qt models.Question
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
-	argID := 1
+	argID := 2
 
 	if input.Name != nil {
 		setValues = append(setValues, fmt.Sprintf("name=$%d", argID))
@@ -80,7 +80,7 @@ func (r *QuestionPostgres) UpdateQuestion(id int, input models.UpdateQuestionInp
 
 	setQuery := strings.Join(setValues, ", ")
 
-	query := fmt.Sprintf("UPDATE questions SET %s RETURNING id, name, phone_number, time, text;", setQuery)
+	query := fmt.Sprintf("UPDATE questions SET %s RETURNING id, name, phone_number, time, text where id=$1", setQuery)
 	row := r.db.QueryRow(query, args...)
 	err := row.Scan(&qt.ID, &qt.Name, &qt.PhoneNumber, &qt.Time, &qt.Text)
 	return qt, err
