@@ -11,19 +11,19 @@ type CategoryPost struct {
 	Name string `json:"name"`
 }
 
-// @Summary Create Category
-// @Security ApiKeyAuth
-// @Tags category
+// @Summary     Create Category
+// @Security    ApiKeyAuth
+// @Tags        category
 // @Description create category
-// @ID create-category
-// @Accept  json
-// @Produce  json
-// @Param input body CategoryPost true "category info"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /admin/category [post]
+// @ID          create-category
+// @Accept      json
+// @Produce     json
+// @Param       input   body      CategoryPost true "category info"
+// @Success     200     {integer} integer      1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /admin/category [post]
 func (h *Handler) createCategory(c *gin.Context) {
 	var input CategoryPost
 
@@ -45,18 +45,18 @@ func (h *Handler) createCategory(c *gin.Context) {
 	})
 }
 
-// @Summary Get Category By Id
-// @Tags category
-// @Security ApiKeyAuth
+// @Summary     Get Category By Id
+// @Tags        category
+// @Security    ApiKeyAuth
 // @Description get category by given id
-// @ID get-category-by-id
-// @Produce  json
-// @Param id path string true "category id"
-// @Success 200 {object} models.Category
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /admin/category/{id} [get]
+// @ID          get-category-by-id
+// @Produce     json
+// @Param       id      path     string true "category id"
+// @Success     200     {object} models.Category
+// @Failure     400,404 {object} errorResponse
+// @Failure     500     {object} errorResponse
+// @Failure     default {object} errorResponse
+// @Router      /admin/category/{id} [get]
 func (h *Handler) getCategoryById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -77,18 +77,18 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 	})
 }
 
-// @Summary Get All Categories
-// @Tags category
-// @Security ApiKeyAuth
+// @Summary     Get All Categories
+// @Tags        category
+// @Security    ApiKeyAuth
 // @Description get all categories
-// @ID get-all-categories
-// @Accept  json
-// @Produce  json
-// @Success 200 {object} []models.Category
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /admin/category [get]
+// @ID          get-all-categories
+// @Accept      json
+// @Produce     json
+// @Success     200     {object} []models.Category
+// @Failure     400,404 {object} errorResponse
+// @Failure     500     {object} errorResponse
+// @Failure     default {object} errorResponse
+// @Router      /admin/category [get]
 func (h *Handler) getAllCategories(c *gin.Context) {
 	data, err := h.services.GetAllCategories()
 	if err != nil {
@@ -103,20 +103,20 @@ func (h *Handler) getAllCategories(c *gin.Context) {
 	})
 }
 
-// @Summary Update Category
-// @Security ApiKeyAuth
-// @Tags category
+// @Summary     Update Category
+// @Security    ApiKeyAuth
+// @Tags        category
 // @Description update category
-// @ID update-category
-// @Accept  json
-// @Produce  json
-// @Param input body CategoryPost true "category info"
-// @Param id path string true "category id"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /admin/category/{id} [put]
+// @ID          update-category
+// @Accept      json
+// @Produce     json
+// @Param       input   body      CategoryPost true "category info"
+// @Param       id      path      string       true "category id"
+// @Success     200     {integer} integer      1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /admin/category/{id} [put]
 func (h *Handler) updateCategory(c *gin.Context) {
 	var input CategoryPost
 	id, err := strconv.Atoi(c.Param("id"))
@@ -143,19 +143,19 @@ func (h *Handler) updateCategory(c *gin.Context) {
 	})
 }
 
-// @Summary Delete Category
-// @Security ApiKeyAuth
-// @Tags category
+// @Summary     Delete Category
+// @Security    ApiKeyAuth
+// @Tags        category
 // @Description delete category by given id
-// @ID delete-category
-// @Accept  json
-// @Produce  json
-// @Param id path string true "category id"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /admin/category/{id} [delete]
+// @ID          delete-category
+// @Accept      json
+// @Produce     json
+// @Param       id      path      string  true "category id"
+// @Success     200     {integer} integer 1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /admin/category/{id} [delete]
 func (h *Handler) deleteCategory(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

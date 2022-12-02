@@ -17,16 +17,16 @@ import (
 	"github.com/spf13/viper"
 )
 
-// @title           Eleanshop
-// @version         1.0
-// @description     API server for eleanshop website.
+// @title       Eleanshop
+// @version     1.0
+// @description API server for eleanshop website.
 
-// @host localhost:8080
+// @host     localhost:8080
 // @BasePath /
 
 // @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
+// @in                         header
+// @name                       Authorization
 
 func main() {
 

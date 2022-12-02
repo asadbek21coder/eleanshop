@@ -15,37 +15,56 @@ type IntSlice struct {
 }
 
 func convertToIntSlice(s string) ([]int, error) {
+	// fmt.Println(s)
 	a := &IntSlice{}
+	// fmt.Println(a)
+
 	err := json.Unmarshal([]byte(`{"Ints":`+s+"}"), a)
+	// fmt.Println(a.Ints)
 	return a.Ints, err
 }
 
+// @Summary     Create Product
+// @Security    ApiKeyAuth
+// @Tags        products
+// @Description create product
+// @ID          create-product
+// @Accept      multipart/form-data
+// @Produce     json
+// @Param       form   formData  models.FakeProduct true "product info"
+// @Param       file   formData  file true "image info"
+// @Success     200     {integer} integer            1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /product [post]
 func (h *Handler) createProduct(c *gin.Context) {
 
 	var userObj models.FakeProduct
 	var request models.ProductRequest
 
 	if err := c.ShouldBind(&userObj); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body: "+err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body1: "+err.Error())
 		return
 	}
-	file, err := c.FormFile("image")
+	file, err := c.FormFile("file")
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body2: "+err.Error())
 		return
 	}
 	err = c.SaveUploadedFile(file, "assets/images/"+file.Filename)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
-		fmt.Println("error: ", err)
-	}
-	sizes, err := convertToIntSlice(userObj.Sizes)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body3: "+err.Error())
 		return
 	}
-	request.ProductName = userObj.ProductName
-	request.CategoryId = userObj.CategoryId
+
+	sizes, err := convertToIntSlice(userObj.Sizes)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body4: "+err.Error())
+		return
+	}
+	request.ProductName = userObj.Name
+	request.CategoryId = userObj.Category
 	request.Price = userObj.Price
 	request.Color = userObj.Color
 	request.Count = userObj.Count
@@ -66,17 +85,17 @@ func (h *Handler) createProduct(c *gin.Context) {
 
 }
 
-// @Summary Get Product By Id
-// @Tags products
+// @Summary     Get Product By Id
+// @Tags        products
 // @Description get product by given id
-// @ID get-product-by-id
-// @Produce  json
-// @Param id path string true "product id"
-// @Success 200 {object} models.Product
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /product/{id} [get]
+// @ID          get-product-by-id
+// @Produce     json
+// @Param       id      path     string true "product id"
+// @Success     200     {object} models.Product
+// @Failure     400,404 {object} errorResponse
+// @Failure     500     {object} errorResponse
+// @Failure     default {object} errorResponse
+// @Router      /product/{id} [get]
 func (h *Handler) getProductById(c *gin.Context) {
 	var id int
 
@@ -99,20 +118,20 @@ func (h *Handler) getProductById(c *gin.Context) {
 	})
 }
 
-// @Summary Get All Products
-// @Tags products
+// @Summary     Get All Products
+// @Tags        products
 // @Description get all products
-// @ID get-all-products
-// @Accept  json
-// @Produce  json
-// @Param search query string false "search"
-// @Param limit query string false "limit"
-// @Param offset query string false "offset"
-// @Success 200 {object} []models.Product
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /product [get]
+// @ID          get-all-products
+// @Accept      json
+// @Produce     json
+// @Param       search  query    string false "search"
+// @Param       limit   query    string false "limit"
+// @Param       offset  query    string false "offset"
+// @Success     200     {object} []models.Product
+// @Failure     400,404 {object} errorResponse
+// @Failure     500     {object} errorResponse
+// @Failure     default {object} errorResponse
+// @Router      /product [get]
 func (h *Handler) getAllProducts(c *gin.Context) {
 
 	search := c.Query("search")
@@ -174,8 +193,8 @@ func (h *Handler) updateProduct(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, "invalid product id param")
 		return
 	}
-	request.ProductName = userObj.ProductName
-	request.CategoryId = userObj.CategoryId
+	request.ProductName = userObj.Name
+	request.CategoryId = userObj.Category
 	request.Price = userObj.Price
 	request.Color = userObj.Color
 	request.Count = userObj.Count
@@ -196,19 +215,19 @@ func (h *Handler) updateProduct(c *gin.Context) {
 
 }
 
-// @Summary Delete Product
-// @Security ApiKeyAuth
-// @Tags products
+// @Summary     Delete Product
+// @Security    ApiKeyAuth
+// @Tags        products
 // @Description delete product by given id
-// @ID delete-products
-// @Accept  json
-// @Produce  json
-// @Param id path string true "product id"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /product/{id} [delete]
+// @ID          delete-products
+// @Accept      json
+// @Produce     json
+// @Param       id      path      string  true "product id"
+// @Success     200     {integer} integer 1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /product/{id} [delete]
 func (h *Handler) deleteProduct(c *gin.Context) {
 	var id int
 

@@ -8,19 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary Create Feedback
-// @Security ApiKeyAuth
-// @Tags feedback
+// @Summary     Create Feedback
+// @Security    ApiKeyAuth
+// @Tags        feedback
 // @Description create feedback
-// @ID create-feedback
-// @Accept  json
-// @Produce  json
-// @Param input body models.UpdateFeedbackInput true "feedback info"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /feedback [post]
+// @ID          create-feedback
+// @Accept      json
+// @Produce     json
+// @Param       input   body      models.UpdateFeedbackInput true "feedback info"
+// @Success     200     {integer} integer                    1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /feedback [post]
 func (h *Handler) createFeedback(c *gin.Context) {
 	var input models.UpdateFeedbackInput
 	userId, _ := c.Get("userId")
@@ -50,18 +50,18 @@ func (h *Handler) createFeedback(c *gin.Context) {
 
 }
 
-// @Summary Get Feedback By Id
-// @Security ApiKeyAuth
-// @Tags feedback
+// @Summary     Get Feedback By Id
+// @Security    ApiKeyAuth
+// @Tags        feedback
 // @Description get feedback by given id
-// @ID get-feedback-by-id
-// @Produce  json
-// @Param id path string true "feedback id"
-// @Success 200 {object} models.Feedback
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /feedback/{id} [get]
+// @ID          get-feedback-by-id
+// @Produce     json
+// @Param       id      path     string true "feedback id"
+// @Success     200     {object} models.Feedback
+// @Failure     400,404 {object} errorResponse
+// @Failure     500     {object} errorResponse
+// @Failure     default {object} errorResponse
+// @Router      /feedback/{id} [get]
 func (h *Handler) getFeedbackById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -82,17 +82,17 @@ func (h *Handler) getFeedbackById(c *gin.Context) {
 	})
 }
 
-// @Summary Get All Feedbacks
-// @Tags feedback
+// @Summary     Get All Feedbacks
+// @Tags        feedback
 // @Description get all feedbacks
-// @ID get-all-feedbacks
-// @Accept  json
-// @Produce  json
-// @Success 200 {object} []models.Feedback
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /feedback [get]
+// @ID          get-all-feedbacks
+// @Accept      json
+// @Produce     json
+// @Success     200     {object} []models.Feedback
+// @Failure     400,404 {object} errorResponse
+// @Failure     500     {object} errorResponse
+// @Failure     default {object} errorResponse
+// @Router      /feedback [get]
 func (h *Handler) getAllFeedbacks(c *gin.Context) {
 	data, err := h.services.Feedback.GetAllFeedbacks()
 	if err != nil {
@@ -107,20 +107,20 @@ func (h *Handler) getAllFeedbacks(c *gin.Context) {
 
 }
 
-// @Summary Update Feedback
-// @Security ApiKeyAuth
-// @Tags feedback
+// @Summary     Update Feedback
+// @Security    ApiKeyAuth
+// @Tags        feedback
 // @Description update feedback
-// @ID update-feedback
-// @Accept  json
-// @Produce  json
-// @Param input body models.UpdateFeedbackInput true "feedback info"
-// @Param id path string true "feedback id"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /feedback/{id} [put]
+// @ID          update-feedback
+// @Accept      json
+// @Produce     json
+// @Param       input   body      models.UpdateFeedbackInput true "feedback info"
+// @Param       id      path      string                     true "feedback id"
+// @Success     200     {integer} integer                    1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /feedback/{id} [put]
 func (h *Handler) updateFeedback(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	userIdInt, ok := userId.(int)
@@ -156,19 +156,19 @@ func (h *Handler) updateFeedback(c *gin.Context) {
 	})
 }
 
-// @Summary Delete Feedback
-// @Security ApiKeyAuth
-// @Tags feedback
+// @Summary     Delete Feedback
+// @Security    ApiKeyAuth
+// @Tags        feedback
 // @Description delete feedback by given id
-// @ID delete-feedback
-// @Accept  json
-// @Produce  json
-// @Param id path string true "feedback id"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /feedback/{id} [delete]
+// @ID          delete-feedback
+// @Accept      json
+// @Produce     json
+// @Param       id      path      string  true "feedback id"
+// @Success     200     {integer} integer 1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /feedback/{id} [delete]
 func (h *Handler) deleteFeedback(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	userIdInt, ok := userId.(int)
