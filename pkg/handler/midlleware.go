@@ -31,24 +31,9 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		newErrorResponse(c, http.StatusUnauthorized, err.Error())
 		return
 	}
-	// fmt.Println(userId)
 	c.Set("userId", userId)
 	c.Set("isAdmin", isAdmin)
 }
-
-// func getUserId(c *gin.Context) (int, error) {
-// 	id, ok := c.Get("userId")
-// 	if !ok {
-// 		return 0, errors.New("user id not found")
-// 	}
-
-// 	idInt, ok := id.(int)
-// 	if !ok {
-// 		return 0, errors.New("user id is of invalid type")
-// 	}
-
-// 	return idInt, nil
-// }
 
 func (h *Handler) isAdmin(c *gin.Context) {
 	h.userIdentity(c)

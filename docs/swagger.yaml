@@ -333,47 +333,6 @@ paths:
       summary: Update Category
       tags:
       - category
-  /admin/set-admin:
-    put:
-      consumes:
-      - application/json
-      description: login
-      operationId: admin
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/models.SetAdmin'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Message
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Set Admin
-      tags:
-      - auth
   /admin/sizes:
     get:
       consumes:
@@ -795,6 +754,42 @@ paths:
       summary: Update Feedback
       tags:
       - feedback
+  /get-admin:
+    get:
+      consumes:
+      - application/json
+      description: get-admins
+      operationId: get-admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: admins
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: GetAdmins
+      tags:
+      - auth
   /product:
     get:
       consumes:
@@ -1230,6 +1225,47 @@ paths:
       summary: Update Question
       tags:
       - question
+  /set-admin:
+    put:
+      consumes:
+      - application/json
+      description: login
+      operationId: admin
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SetAdmin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Set Admin
+      tags:
+      - auth
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -90,7 +90,7 @@ func (h *Handler) signin(c *gin.Context) {
 // @Failure     400,404 {object} errorResponse
 // @Failure     500     {object} errorResponse
 // @Failure     default {object} errorResponse
-// @Router      /admin/set-admin [put]
+// @Router      /set-admin [put]
 func (h *Handler) setAdmin(c *gin.Context) {
 	var input models.SetAdmin
 
@@ -113,6 +113,7 @@ func (h *Handler) setAdmin(c *gin.Context) {
 
 // @Summary     GetAdmins
 // @Tags        auth
+// @Security    ApiKeyAuth
 // @Description get-admins
 // @ID          get-admin
 // @Accept      json
@@ -121,7 +122,7 @@ func (h *Handler) setAdmin(c *gin.Context) {
 // @Failure     400,404 {object} errorResponse
 // @Failure     500     {object} errorResponse
 // @Failure     default {object} errorResponse
-// @Router      /auth/signin [post]
+// @Router      /get-admin [get]
 func (h *Handler) getAdmins(c *gin.Context) {
 
 	data, err := h.services.Authorization.GetAdmins()
