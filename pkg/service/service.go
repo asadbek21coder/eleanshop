@@ -10,6 +10,7 @@ type Authorization interface {
 	GenerateToken(username, password string) (string, error)
 	ParseToken(accessToken string) (int, bool, error)
 	SetAdmin(input models.SetAdmin) error
+	GetAdmins() ([]string, error)
 }
 
 type Service struct {

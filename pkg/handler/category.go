@@ -47,7 +47,6 @@ func (h *Handler) createCategory(c *gin.Context) {
 
 // @Summary     Get Category By Id
 // @Tags        category
-// @Security    ApiKeyAuth
 // @Description get category by given id
 // @ID          get-category-by-id
 // @Produce     json
@@ -79,7 +78,6 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 
 // @Summary     Get All Categories
 // @Tags        category
-// @Security    ApiKeyAuth
 // @Description get all categories
 // @ID          get-all-categories
 // @Accept      json

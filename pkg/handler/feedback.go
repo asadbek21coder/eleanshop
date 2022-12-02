@@ -51,7 +51,6 @@ func (h *Handler) createFeedback(c *gin.Context) {
 }
 
 // @Summary     Get Feedback By Id
-// @Security    ApiKeyAuth
 // @Tags        feedback
 // @Description get feedback by given id
 // @ID          get-feedback-by-id

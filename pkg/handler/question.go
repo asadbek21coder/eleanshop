@@ -43,7 +43,6 @@ func (h *Handler) createQuestion(c *gin.Context) {
 }
 
 // @Summary     Get Question By Id
-// @Security    ApiKeyAuth
 // @Tags        question
 // @Description get question by given id
 // @ID          get-question-by-id

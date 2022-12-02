@@ -43,9 +43,7 @@ func (h *Handler) createSize(c *gin.Context) {
 	})
 }
 
-
 // @Summary     Get All Size
-// @Security    ApiKeyAuth
 // @Tags        size
 // @Description get all sizes
 // @ID          get-all-sizes
@@ -105,7 +103,6 @@ func (h *Handler) deleteSize(c *gin.Context) {
 }
 
 // @Summary     Get Size By Id
-// @Security    ApiKeyAuth
 // @Tags        size
 // @Description get size by given id
 // @ID          get-size-by-id

@@ -18,11 +18,6 @@ const docTemplate = `{
     "paths": {
         "/admin/category": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "get all categories",
                 "consumes": [
                     "application/json"
@@ -136,11 +131,6 @@ const docTemplate = `{
         },
         "/admin/category/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "get category by given id",
                 "produces": [
                     "application/json"
@@ -388,11 +378,6 @@ const docTemplate = `{
         },
         "/admin/sizes": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "get all sizes",
                 "consumes": [
                     "application/json"
@@ -506,11 +491,6 @@ const docTemplate = `{
         },
         "/admin/sizes/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "get size by given id",
                 "produces": [
                     "application/json"
@@ -856,11 +836,6 @@ const docTemplate = `{
         },
         "/feedback/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "get feedback by given id",
                 "produces": [
                     "application/json"
@@ -1529,11 +1504,6 @@ const docTemplate = `{
         },
         "/question/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "get question by given id",
                 "produces": [
                     "application/json"

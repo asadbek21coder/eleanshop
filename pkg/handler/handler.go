@@ -28,6 +28,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.PUT("/set-admin", h.isAdmin, h.setAdmin)
+	router.GET("/get-admin", h.isAdmin, h.getAdmins)
 	auth := router.Group("/auth")
 
 	{

@@ -170,8 +170,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Get All Categories
       tags:
       - category
@@ -287,8 +285,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Get Category By Id
       tags:
       - category
@@ -409,8 +405,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Get All Size
       tags:
       - size
@@ -526,8 +520,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Get Size By Id
       tags:
       - size
@@ -755,8 +747,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Get Feedback By Id
       tags:
       - feedback
@@ -1192,8 +1182,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Get Question By Id
       tags:
       - question

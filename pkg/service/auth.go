@@ -81,6 +81,10 @@ func (s *AuthService) ParseToken(accessToken string) (int, bool, error) {
 	return claims.UserId, claims.IsAdmin, nil
 }
 
-func (s *AuthService) SetAdmin(input models.SetAdmin) (error) {
+func (s *AuthService) SetAdmin(input models.SetAdmin) error {
 	return s.repo.SetAdmin(input)
+}
+
+func (s *AuthService) GetAdmins() ([]string, error) {
+	return s.repo.GetAdmins()
 }

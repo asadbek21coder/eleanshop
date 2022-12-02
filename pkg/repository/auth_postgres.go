@@ -46,3 +46,30 @@ func (r *AuthPostgres) SetAdmin(input models.SetAdmin) error {
 
 	return nil
 }
+
+func (r *AuthPostgres) GetAdmins() ([]string, error) {
+	var response []string
+	queryGetAdmins := ` SELECT 
+							username
+						FROM
+							users
+						WHERE
+							is_admin=true;
+							`
+	row, err := r.db.Query(queryGetAdmins)
+	if err != nil {
+		return nil, err
+	}
+	for row.Next() {
+		var username string
+
+		err := row.Scan(&username)
+		if err != nil {
+			return nil, err
+		}
+		response = append(response, username)
+
+	}
+
+	return response, nil
+}

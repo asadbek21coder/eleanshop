@@ -110,3 +110,28 @@ func (h *Handler) setAdmin(c *gin.Context) {
 	})
 
 }
+
+// @Summary     GetAdmins
+// @Tags        auth
+// @Description get-admins
+// @ID          get-admin
+// @Accept      json
+// @Produce     json
+// @Success     200     {object} []string      "admins"
+// @Failure     400,404 {object} errorResponse
+// @Failure     500     {object} errorResponse
+// @Failure     default {object} errorResponse
+// @Router      /auth/signin [post]
+func (h *Handler) getAdmins(c *gin.Context) {
+
+	data, err := h.services.Authorization.GetAdmins()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data":    data,
+		"Message": "OK",
+	})
+}
