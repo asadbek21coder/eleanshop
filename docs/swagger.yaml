@@ -984,6 +984,68 @@ paths:
       summary: Get Product By Id
       tags:
       - products
+    put:
+      consumes:
+      - multipart/form-data
+      description: update product
+      operationId: update-product
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: category
+        type: integer
+      - in: formData
+        name: color
+        type: string
+      - in: formData
+        name: count
+        type: integer
+      - in: formData
+        name: name
+        type: string
+      - in: formData
+        name: price
+        type: integer
+      - in: formData
+        name: sizes
+        type: string
+      - description: image info
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Product
+      tags:
+      - products
   /question:
     get:
       consumes:

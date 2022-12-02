@@ -165,6 +165,21 @@ func (h *Handler) getAllProducts(c *gin.Context) {
 	})
 }
 
+// @Summary     Update Product
+// @Security    ApiKeyAuth
+// @Tags        products
+// @Description update product
+// @ID          update-product
+// @Accept      multipart/form-data
+// @Produce     json
+// @Param       id      path      string       true "product id"
+// @Param       form   formData  models.FakeProduct true "product info"
+// @Param       file   formData  file true "image info"
+// @Success     200     {integer} integer            1
+// @Failure     400,404 {object}  errorResponse
+// @Failure     500     {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /product/{id} [put]
 func (h *Handler) updateProduct(c *gin.Context) {
 	var userObj models.FakeProduct
 	var request models.ProductRequest
@@ -173,9 +188,9 @@ func (h *Handler) updateProduct(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body: "+err.Error())
 		return
 	}
-	file, err := c.FormFile("image")
+	file, err := c.FormFile("file")
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body"+err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body: "+err.Error())
 		return
 	}
 	err = c.SaveUploadedFile(file, "assets/images/"+file.Filename)

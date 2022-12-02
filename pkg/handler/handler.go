@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/asadbek21coder/eleanshop/pkg/service"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files" // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -19,10 +20,14 @@ func NewHandler(services *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-	// config := cors.DefaultConfig()
-	// config.AllowOrigins = []string{"*"}
-	// router.Use(cors.New(config))
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	router.Use(cors.New(config))
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	router.PUT("/set-admin", h.isAdmin, h.setAdmin)
 	auth := router.Group("/auth")
 
 	{
@@ -34,33 +39,28 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	product := router.Group("/product")
 	{
 
-		product.POST("/", h.createProduct)
+		product.POST("/", h.isAdmin, h.createProduct)
 		product.GET("/", h.getAllProducts)
 		product.GET("/:id", h.getProductById)
 		product.PUT("/:id", h.isAdmin, h.updateProduct)
 		product.DELETE("/:id", h.isAdmin, h.deleteProduct)
 	}
 
-	admin := router.Group("/admin", h.isAdmin)
+	category := router.Group("/category")
 	{
-		admin.PUT("/set-admin", h.isAdmin, h.setAdmin)
+		category.GET("/", h.getAllCategories)
+		category.POST("/", h.isAdmin, h.createCategory)
+		category.GET("/:id", h.getCategoryById)
+		category.PUT("/:id", h.isAdmin, h.updateCategory)
+		category.DELETE("/:id", h.isAdmin, h.deleteCategory)
+	}
 
-		category := admin.Group("/category")
-		{
-			category.GET("/", h.getAllCategories)
-			category.POST("/", h.isAdmin, h.createCategory)
-			category.GET("/:id", h.getCategoryById)
-			category.PUT("/:id", h.isAdmin, h.updateCategory)
-			category.DELETE("/:id", h.isAdmin, h.deleteCategory)
-		}
-
-		sizes := admin.Group("/sizes")
-		{
-			sizes.POST("/", h.isAdmin, h.createSize)
-			sizes.GET("/", h.getAllSizes)
-			sizes.GET("/:id", h.getSizesById)
-			sizes.DELETE("/:id", h.isAdmin, h.deleteSize)
-		}
+	sizes := router.Group("/sizes")
+	{
+		sizes.POST("/", h.isAdmin, h.createSize)
+		sizes.GET("/", h.getAllSizes)
+		sizes.GET("/:id", h.getSizesById)
+		sizes.DELETE("/:id", h.isAdmin, h.deleteSize)
 	}
 
 	feedback := router.Group("/feedback")
